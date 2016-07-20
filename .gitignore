@@ -1,4 +1,4 @@
-####### LAST UPDATED ON JULY 13th ####### . 
+####### June 14th. 
 
 library(gridExtra)
 library(ggplot2)
@@ -7,7 +7,7 @@ library(plyr)
 library(reshape)
 library(car)
 library(plotrix)
-
+library(rowr)
 
 read.csv("/Users/luisvalderrama/Desktop/HHMI Research/R_MAC2311_GRADES.csv")
 read.csv("/Users/luisvalderrama/Desktop/HHMI Research/R_MAC2311_GRADES.csv")
@@ -382,9 +382,171 @@ MAC2311_ALEKS_RPT_1118_1161$Repeats[i] <- with(MAC2311_ALEKS_RPT_1118_1161[i, ],
 MAC2311_ALEKS_RPT_1118_1161$Repeats <- NULL
 
 
-MACTESTINGRPT <- MAC2311_ALEKS_RPT_1118_1161
+MACTESTINGRPT <- data.frame((MAC2311_ALEKS_RPT_1118_1161$ID),(MAC2311_ALEKS_RPT_1118_1161$Term))
+MACTESTINGRPT$Repeats <- 0L
+i <- which(duplicated(MACTESTINGRPT$X.MAC2311_ALEKS_RPT_1118_1161.ID.))
+MACTESTINGRPT$Repeats[i] <- with(MACTESTINGRPT[i, ], unsplit(lapply(split(X.MAC2311_ALEKS_RPT_1118_1161.ID., X.MAC2311_ALEKS_RPT_1118_1161.ID.), seq_along), X.MAC2311_ALEKS_RPT_1118_1161.ID.))
+
+write.csv(MACTESTINGRPT, file = "/Users/luisvalderrama/Desktop/MACTESTINGRPT.csv",row.names=FALSE)
+
+## TRIG+PRECALC###
+MAC1147 <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/Pre Reqs/MAC1147_1071-1161_FIU_JD_CRSE_GRADE_DATA_2_476707713-10.csv")
+MAC1147_RPT <- MAC1147[c("ID","Term")] ## adding only specific colums from old dataframe to new dataframe ##
+## testng repeat count 
+MAC1147_RPT$Repeats <- 0L
+i <- which(duplicated(MAC1147_RPT$ID))
+MAC1147_RPT$Repeats[i] <- with(MAC1147_RPT[i, ], unsplit(lapply(split(ID, ID), seq_along), ID))
+
+MAC1147_RPT$T_P.Grd.Pt.Unt <- MAC1147$Grd.Pt.Unt
+names(MAC1147_RPT)[names(MAC1147_RPT)=="Repeats"] <- "Trig.PCal.Rpt"
+names(MAC1147_RPT)[names(MAC1147_RPT)=="Term"] <- "Trig.PCal.Term"
+
+MAC1147_RPT <- MAC1147_RPT[order(MAC1147_RPT$Trig.PCal.Rpt) , ]  ##Keeps most recent repeats wihtout having duplicates##
+MAC1147_RPT <- MAC1147_RPT[!duplicated(MAC1147_RPT$ID, fromLast = TRUE) , ]
 
 
+MAC1147$Repeats <- MAC1147_RPT$Repeats
+
+#COLLEGE ALGEBRA###
+MAC1105 <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/Pre Reqs/College_Algebra_1071_1161.csv")
+MAC1105_RPT <- MAC1105[c("ID","Term")]
+MAC1105_RPT$Repeats <- 0L
+i <- which(duplicated(MAC1105_RPT$ID))
+MAC1105_RPT$Repeats[i] <- with(MAC1105_RPT[i, ], unsplit(lapply(split(ID, ID), seq_along), ID))
+
+MAC1105_RPT$Grd.Pt.Unt <- MAC1105$Grd.Pt.Unt
+names(MAC1105_RPT)[names(MAC1105_RPT)=="Repeats"] <- "Col.Alg.Rpt"
+names(MAC1105_RPT)[names(MAC1105_RPT)=="Grd.Pt.Unt"] <- "Col.Alg.Grd.Pt.Unt"
+names(MAC1105_RPT)[names(MAC1105_RPT)=="Term"] <- "Col.Alg.Term"
+
+MAC1105_RPT <- MAC1105_RPT[order(MAC1105_RPT$Col.Alg.Rpt),]
+MAC1105_RPT <- MAC1105_RPT[!duplicated(MAC1105_RPT$ID, fromLast = TRUE) , ]
+
+MAC1105$Repeats <- MAC1105_RPT$Repeats
+
+## TRIGONOMETRY ##
+MAC1114 <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/Pre Reqs/MAC1114_1071-1161_FIU_JD_CRSE_GRADE_DATA_2_476707713-10-4.csv")
+MAC1114_RPT <- MAC1114[c("ID","Term")]
+MAC1114_RPT$Repeats <- 0L
+i <- which(duplicated(MAC1114_RPT$ID))
+MAC1114_RPT$Repeats[i] <- with(MAC1114_RPT[i, ], unsplit(lapply(split(ID, ID), seq_along), ID))
+
+MAC1114_RPT$Trig.Grd.Pt.Unt <- MAC1114$Grd.Pt.Unt
+names(MAC1114_RPT)[names(MAC1114_RPT)=="Repeats"] <- "Trig.Rpt"
+names(MAC1114_RPT)[names(MAC1114_RPT)=="Term"] <- "Trig.Term"
+
+MAC1114_RPT <- MAC1114_RPT[order(MAC1114_RPT$Trig.Rpt),]
+MAC1114_RPT <- MAC1114_RPT[!duplicated(MAC1114_RPT$ID, fromLast = TRUE) , ]
 
 
+MAC1114$Repeats <- MAC1114_RPT$Repeats
+
+### PRECALC ##
+MAC1140 <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/Pre Reqs/MAC1140_1071-1161_FIU_JD_CRSE_GRADE_DATA_2_476707713-10.csv")
+MAC1140_RPT <- MAC1140[c("ID","Term")]
+MAC1140_RPT$Repeats <- 0L
+i <- which(duplicated(MAC1140_RPT$ID))
+MAC1140_RPT$Repeats[i] <- with(MAC1140_RPT[i, ], unsplit(lapply(split(ID, ID), seq_along), ID))
+
+MAC1140_RPT$PCal.Grd.Pt.Unt <- MAC1140$Grd.Pt.Unt
+names(MAC1140_RPT)[names(MAC1140_RPT)=="Repeats"] <- "PCal.Rpt"
+names(MAC1140_RPT)[names(MAC1140_RPT)=="Term"] <- "PCal.Term"
+
+MAC1140_RPT <- MAC1140_RPT[order(MAC1140_RPT$PCal.Rpt),]
+MAC1140_RPT <- MAC1140_RPT[!duplicated(MAC1140_RPT$ID, fromLast = TRUE) , ]
+
+
+MAC1140$Repeats <- MAC1140_RPT$Repeats
+
+## STATS 1 ##
+STATS1 <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/Pre Reqs/STA3111_1118-1161_FIU_JD_CRSE_GRADE_DATA_2_476707713-9.csv")
+STATS1_RPT <- STATS1[c("ID","Term")]
+STATS1_RPT$Repeats <- 0L
+i <- which(duplicated(STATS1_RPT$ID))
+STATS1_RPT$Repeats[i] <- with(STATS1_RPT[i, ], unsplit(lapply(split(ID, ID), seq_along), ID))
+
+STATS1_RPT$STATS1.Grd.Pt.Unt <- STATS1$Grd.Pt.Unt
+names(STATS1_RPT)[names(STATS1_RPT)=="Trig.PCal.Rpt"] <- "STATS1.Rpt"
+names(STATS1_RPT)[names(STATS1_RPT)=="Trig.PCal.Term"] <- "STATS1.Term"
+
+STATS1_RPT <- STATS1_RPT[order(STATS1_RPT$STATS1.Rpt) , ]  ##Keeps most recent repeats wihtout having duplicates##
+STATS1_RPT <- STATS1_RPT[!duplicated(STATS1_RPT$ID, fromLast = TRUE) , ]
+
+STATS1$Repeats <- STATS1_RPT$Repeats
+
+## STATS 2 ##
+STATS2 <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/Pre Reqs/STA3112_1118-1161_FIU_JD_CRSE_GRADE_DATA_2_476707713-9-2.csv")
+STATS2_RPT <- STATS2[c("ID","Term")]
+STATS2_RPT$Repeats <- 0L
+i <- which(duplicated(STATS2_RPT$ID))
+STATS2_RPT$Repeats[i] <- with(STATS2_RPT[i, ], unsplit(lapply(split(ID, ID), seq_along), ID))
+
+STATS2_RPT$STATS2.Grd.Pt.Unt <- STATS2$Grd.Pt.Unt
+names(STATS2_RPT)[names(STATS2_RPT)=="Repeats"] <- "STATS2.Rpt"
+names(STATS2_RPT)[names(STATS2_RPT)=="Term"] <- "STATS2.Term"
+
+STATS2_RPT <- STATS2_RPT[order(STATS2_RPT$STATS2.Rpt) , ]  ##Keeps most recent repeats wihtout having duplicates##
+STATS2_RPT <- STATS2_RPT[!duplicated(STATS2_RPT$ID, fromLast = TRUE) , ]
+
+STATS2$Repeats <- STATS2_RPT$Repeats
+
+## CALC 2 ##
+CALC2 <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/Pre Reqs/MAC2312_1118-1161_FIU_JD_CRSE_GRADE_DATA_2_476707713-9.csv")
+CALC2_RPT <- CALC2[c("ID","Term")]
+CALC2_RPT$Repeats <- 0L
+i <- which(duplicated(CALC2_RPT$ID))
+CALC2_RPT$Repeats[i] <- with(CALC2_RPT[i, ], unsplit(lapply(split(ID, ID), seq_along), ID))
+
+CALC2_RPT$CALC2.Grd.Pt.Unt <- CALC2$Grd.Pt.Unt
+names(CALC2_RPT)[names(CALC2_RPT)=="Repeats"] <- "CALC2.Rpt"
+names(CALC2_RPT)[names(CALC2_RPT)=="Term"] <- "CALC2.Term"
+
+CALC2_RPT <- CALC2_RPT[order(CALC2_RPT$CALC2.Rpt) , ]  ##Keeps most recent repeats wihtout having duplicates##
+CALC2_RPT <- CALC2_RPT[!duplicated(CALC2_RPT$ID, fromLast = TRUE) , ]
+
+
+CALC2$Repeats <- CALC2_RPT[c("Repeats")]
+
+## Merging Pre reqs into MAC2311_Aleks_rpt
+ALL_CLASSES <- merge(MAC1105_RPT, MAC1114_RPT, all=TRUE)
+ALL_CLASSES <- merge(ALL_CLASSES, MAC1140_RPT, all=TRUE)
+ALL_CLASSES <- merge(ALL_CLASSES, MAC1147_RPT, all=TRUE)
+ALL_CLASSES <- merge(ALL_CLASSES, STATS1_RPT, all=TRUE)
+ALL_CLASSES <- merge(ALL_CLASSES, STATS2_RPT, all=TRUE)
+ALL_CLASSES <- merge(ALL_CLASSES, CALC2_RPT, all=TRUE)
+
+ALL_PRECLASSES <- join(MAC2311_ALEKS_RPT_1118_1161, ALL_CLASSES, type="left")
+
+##linear model for previous classes##
+
+TrigPCalc <- merge(MAC1140_RPT, MAC1114_RPT, all=TRUE)
+TrigPCalc <- merge(TrigPCalc, MAC1147_RPT, all=TRUE)
+TrigPCalc$PCal.Term <-NULL
+TrigPCalc$PCal.Rpt <- NULL
+TrigPCalc$Trig.Term <- NULL
+TrigPCalc$Trig.Rpt <- NULL
+TrigPCalc$Trig.PCal.Term <- NULL
+TrigPCalc$Trig.PCal.Rpt <- NULL
+# One way to do it##
+TrigPCalc[-1] <- lapply(TrigPCalc[-1], function(x) as.numeric(as.character(x)))
+TrigPCalc$Avg.Trig.PCal <-  rowMeans(TrigPCalc[-1], na.rm=TRUE)
+TrigPCalc$Avg
+
+ALL_PRECLASSES <- join(ALL_PRECLASSES, TrigPCalc, type="left")
+ALL_PRECLASSES$Avg.Trig.PCal <- NULL
+## Second way to do it
+TrigPCalc$Avg.Trig.Pcalc <- with(TrigPCalc, ifelse(is.na(Trig.Grd.Pt.Unt) | is.na(PCal.Grd.Pt.Unt), T_P.Grd.Pt.Unt, (Trig.Grd.Pt.Unt + PCal.Grd.Pt.Unt) / 2))
+table(TrigPCalc$T_P.Grd.Pt.Unt, useNA = "ifany")
+table(TrigPCalc$Trig.Grd.Pt.Unt, useNA= "ifany")
+table(TrigPCalc$PCal.Grd.Pt.Unt, useNA = "ifany")
+
+TrigPCalc$Avg <- with(TrigPCalc, ifelse(T_P.Grd.Pt.Unt>="0", T_P.Grd.Pt.Unt, 
+                                        ifelse(TrigPCalc$TriPCal_r =="2", "other1", "other")))
+
+str(TrigPCalc)
+TrigPCalc$Trig_r <- ifelse(TrigPCalc$Trig.Grd.Pt.Unt>="0", "1", "0")
+TrigPCalc$PCalc_r <- ifelse(TrigPCalc$PCal.Grd.Pt.Unt>="0", "1", "0")
+TrigPCalc$TriPCal_r <- as.numeric(TrigPCalc$PCalc_r)+ as.numeric(TrigPCalc$Trig_r)
+str(TrigPCalc$Trig_r)
+table(TrigPCalc$TriPCal_r)
 
