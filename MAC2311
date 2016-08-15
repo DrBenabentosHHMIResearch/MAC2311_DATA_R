@@ -9,6 +9,8 @@ library(car)
 library(plotrix)
 library(rowr)
 library(dplyr)
+library(fmsb)
+library(plotly)
 
 read.csv("/Users/luisvalderrama/Desktop/HHMI Research/R_MAC2311_GRADES.csv")
 read.csv("/Users/luisvalderrama/Desktop/HHMI Research/R_MAC2311_GRADES.csv")
@@ -588,3 +590,36 @@ summary(lm.s)
 
 
 str(ALL_PRECLASSES)
+
+FinalF15 <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/Pre Reqs/FINAL FALL 2015 Question.csv")
+
+#Spider web#
+radarchart(FinalF15, axistype = 1, pcol=rgb(0, 0.5, 0.8) , pfcol=rgb(0.2,0.5,0.8,0.5), plwd=4 , cglcol="gold", cglty = 1, axislabcol="black", cglwd = 0.8, vlcex = 0.8, title = "MAC2311 Fall 15 Final Question Averages")
+
+##Transposing FinalF15# IGNORE HAD TO DO IT IN EXCEL 
+#Wasn't working due to the min and max not being on the df
+SW.FinalF15t = data.frame(lo=c("0"),Q1=c("44.60"),Q2=c("52.81"),Q3=c("51.12"),Q4=c("64.30"),Q5=c("45.01"),Q6=c("31.98"),Q7=c("58.01"),Q8=c("40.92"),Q9=c("69.65"),Q10=c("56.59"),Q11=c("42.59"),Q12=c("50.54"),AVERAGE=c("53.55"))
+SW.FinalF15t= rbind(rep(100,13),rep(0,13), SW.FinalF15t[i,-1])
+SW.FinalF15t <- t(SW.FinalF15t[,2:ncol(SW.FinalF15t)])
+SW.FinalF15t <- cbind("0"= 0, SW.FinalF15t)
+######
+
+## how to summarize ##
+##barplot###
+ggplot(FinalF15bp, aes(x=Question, y=Average)) + geom_bar(stat= "identity", fill="lightgoldenrod1", color="navy") + 
+  labs(title= "MAC2311 Fall 15 Final Question Averages") + scale_y_continuous(limits = c(0,100)) +
+  theme(axis.text.x= element_text(colour= "darkblue", angle = 0, size = 12, vjust = 0.6), axis.text.y=element_text(colour = "darkblue", size = 12), title=element_text(colour = "Navy blue", size = 20))
+
+#### to summarise the data ###
+m <- ddply(HHMI, ".", summarise, mean = mean(Q02.12.1, na.rm=TRUE), 
+           count1 = sum(Q02.12.1==1, na.rm=TRUE),
+           count2 = sum(Q02.12.1==2, na.rm=TRUE), 
+           count3 = sum(Q02.12.1==3, na.rm=TRUE),
+           count4 = sum(Q02.12.1==4, na.rm=TRUE),
+           count5 = sum(Q02.12.1==5, na.rm=TRUE))
+m$total <- with(m, (count1+count2+count3+count4+count5))
+m$perc1 <- (m$count1/m$total)*100
+m$perc2 <- (m$count2/m$total)*100
+m$perc3 <- (m$count3/m$total)*100
+m$perc4 <- (m$count4/m$total)*100
+m$perc5 <- (m$count5/m$total)*100
