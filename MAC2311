@@ -8,6 +8,7 @@ library(reshape)
 library(car)
 library(plotrix)
 library(rowr)
+library(dplyr)
 
 read.csv("/Users/luisvalderrama/Desktop/HHMI Research/R_MAC2311_GRADES.csv")
 read.csv("/Users/luisvalderrama/Desktop/HHMI Research/R_MAC2311_GRADES.csv")
@@ -22,7 +23,8 @@ table(MACDATA$Sex)
 ####SUMMARY FOR SAT SCORES
 
   ### CREATING VARIABLE
-MACDATA$Max.Score_NA <- recode(MACDATA$Max.Score, "0=NA") #### to rid 0 and convert them to NA
+is.na(MACDATA$Max.Score) <- !MACDATA$Max.Score#### to rid 0 and convert them to NA
+MACDATA$Max.Score_NA <- MACDATA$Max.Score
 table(MACDATA$Max.Score_NA)  #### TO Check 0 were deleted
 
 hist(MACDATA$Max.Score_NA) #### makes histogram of Data
@@ -150,7 +152,8 @@ print(lm.r)
 describeBy()
 
 MAC2311_ALEKS_RPT_1118_1161 <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/MAC2311_ALEKS_RPT_1118_1161.csv")
-MAC2311_ALEKS_RPT_1118_1161$Max.Score_NA <- recode(MAC2311_ALEKS_RPT_1118_1161$Max.Score, "0=NA")
+is.na(MAC2311_ALEKS_RPT_1118_1161$Max.Score) <- !MAC2311_ALEKS_RPT_1118_1161$Max.Score
+MAC2311_ALEKS_RPT_1118_1161$Max.Score_NA <- MAC2311_ALEKS_RPT_1118_1161$Max.Score
 MAC2311_ALEKS_RPT_1158_1161 <- subset(MAC2311_ALEKS_RPT_1118_1161, Term=="1158"|Term=="1161")
 MAC2311_ALEKS_RPT_1158_1161 <- subset(MAC2311_ALEKS_RPT_1158_1161, Instr.ID="")
 ## LM on Aleks and Repeats
@@ -162,11 +165,12 @@ summary(lm.a)
 ### Here again there is a positive correlation with the max SAT score and also a negative correlation with repeated
 ### But the r squared value is still <.2.
 
-MAC2311_ALEKS_RPT_1118_1161$Max.Score.NA <- recode(MAC2311_ALEKS_RPT_1118_1161$Max.Score, "0=NA") #### to rid 0 and convert them to NA
+is.na(MAC2311_ALEKS_RPT_1118_1161$Max.Score) <- !MAC2311_ALEKS_RPT_1118_1161$Max.Score
+MAC2311_ALEKS_RPT_1118_1161$Max.Score_NA <- MAC2311_ALEKS_RPT_1118_1161$Max.Score
 table(MAC2311_ALEKS_RPT_1118_1161$Max.Score_NA)  #### TO Check 0 were deleted
 
 #Tests Grade point control against MAX SAT, SEX, GPA, and REPEATS
-lm.b = lm( Grd.Pt.Unt ~ Max.Score_NA + Sex.NA + GPA + Repeated. + as.factor(Instr.ID) + as.factor(Instr.ID):Max.Score.NA, data=MAC2311_ALEKS_RPT_1118_1161)
+lm.b = lm( Grd.Pt.Unt ~ Max.Score_NA + Sex.NA + GPA + Repeated. + as.factor(Instr.ID) + as.factor(Instr.ID):Max.Score_NA, data=MAC2311_ALEKS_RPT_1118_1161)
 summary(lm.b)
 ##-It was seen that when adding other variables, the more they repeat the more they are likely
 ##   to pass the course. Although, when repeats are done individually there is a negative correlation. How come?
@@ -199,7 +203,8 @@ table(MAC2311_1116$Term, MAC2311_1116$Section)
 
 DIAG <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/MAC2311 Calc Diag.csv")
 ##Adding new varible "ID" to match other dataset
-DIAG$ID <- recode(DIAG$Student.ID, "0=NA")
+is.na(DIAG$Student.ID) <- !DIAG$Student.ID
+DIAG$ID <- DIAG$Student.ID
 
 ##Binding depending on a variable SPRING 16
 DIAG_1116_MAC2311 <- merge(MAC2311_1116_Diag, DIAG, by="ID", all=T)
@@ -285,7 +290,7 @@ print(boxplot.6)
 lm.k <- lm(SCALEUP.1158.1161$Grd.Pt.Unt ~ SCALEUP.1158.1161$Max.Score_NA + SCALEUP.1158.1161$Learning )
 summary(lm.k)
 
-lm.l <- lm(SCALEUP.1158.1161$Grd.Pt.Unt ~ SCALEUP.1158.1161$Max.Score_NA + SCALEUP.1158.1161$Sex + SCALEUP.1158.1161$GPA + SCALEUP.1158.1161$)
+lm.l <- lm(SCALEUP.1158.1161$Grd.Pt.Unt ~ SCALEUP.1158.1161$Max.Score_NA + SCALEUP.1158.1161$Sex + SCALEUP.1158.1161$GPA + SCALEUP.1158.1161$Learning)
 summary(lm.l)
 
 MACDATA.SCALEUP_1158_1161 <- subset(MACDATA.SCALEUP, Term=="1158"|Term=="1161")
@@ -515,7 +520,7 @@ ALL_CLASSES <- merge(ALL_CLASSES, STATS1_RPT, all=TRUE)
 ALL_CLASSES <- merge(ALL_CLASSES, STATS2_RPT, all=TRUE)
 ALL_CLASSES <- merge(ALL_CLASSES, CALC2_RPT, all=TRUE)
 
-ALL_PRECLASSES <- join(MAC2311_ALEKS_RPT_1118_1161, ALL_CLASSES, type="left")
+ALL_PRECLASSES <- merge(MAC2311_ALEKS_RPT_1118_1161,ALL_CLASSES, by="ID", all.x=TRUE)
 
 ##linear model for previous classes##
 
@@ -540,13 +545,46 @@ table(TrigPCalc$T_P.Grd.Pt.Unt, useNA = "ifany")
 table(TrigPCalc$Trig.Grd.Pt.Unt, useNA= "ifany")
 table(TrigPCalc$PCal.Grd.Pt.Unt, useNA = "ifany")
 
-TrigPCalc$Avg <- with(TrigPCalc, ifelse(T_P.Grd.Pt.Unt>="0", T_P.Grd.Pt.Unt, 
-                                        ifelse(TrigPCalc$TriPCal_r =="2", "other1", "other")))
+TrigPCalc$Avg <- 0L
+TrigPCalc$Trig_Pcal.Grd.Unt <- with(TrigPCalc, ifelse(!is.na(T_P.Grd.Pt.Unt), T_P.Grd.Pt.Unt, 
+                                        ifelse(!is.na(Trig.Grd.Pt.Unt)&!is.na(PCal.Grd.Pt.Unt), ((Trig.Grd.Pt.Unt+PCal.Grd.Pt.Unt)/2),
+                                               ifelse(!is.na(Trig.Grd.Pt.Unt), Trig.Grd.Pt.Unt, 
+                                                      ifelse(!is.na(PCal.Grd.Pt.Unt), PCal.Grd.Pt.Unt, "NA")))))
+table(TrigPCalc$Avg, useNA = "ifany")
+                                
+TrigPCalc$Avg2 <- with(TrigPCalc, ifelse(is.na(Trig.Grd.Pt.Unt)&is.na(PCal.Grd.Pt.Unt)&is.na(T_P.Grd.Pt.Unt), "yes","no"))
+                                        
+TrigPCalc$PCal.Grd.Pt.Unt <- NULL
+TrigPCalc$Trig.Grd.Pt.Unt <- NULL
+TrigPCalc$T_P.Grd.Pt.Unt <- NULL
+TrigPCalc$Avg.Trig.Pcalc <- NULL
+TrigPCalc$Avg <- NULL
+TrigPCalc$Trig_r <- NULL
+TrigPCalc$PCalc_r <- NULL
+TrigPCalc$TriPCal_r <- NULL
+TrigPCalc$Avg1 <- NULL
+TrigPCalc$Avg2 <- NULL
 
-str(TrigPCalc)
-TrigPCalc$Trig_r <- ifelse(TrigPCalc$Trig.Grd.Pt.Unt>="0", "1", "0")
-TrigPCalc$PCalc_r <- ifelse(TrigPCalc$PCal.Grd.Pt.Unt>="0", "1", "0")
-TrigPCalc$TriPCal_r <- as.numeric(TrigPCalc$PCalc_r)+ as.numeric(TrigPCalc$Trig_r)
-str(TrigPCalc$Trig_r)
-table(TrigPCalc$TriPCal_r)
+ALL_PRECLASSES <- merge(ALL_PRECLASSES, TrigPCalc, by="ID", all.x=TRUE)
 
+write.csv(ALL_PRECLASSES, file = "/Users/luisvalderrama/Desktop/OVERALLMAC2311.csv",row.names=FALSE)
+
+
+##THINGS TO DO linear models on MAC2311 ##
+
+lm.s <- lm(ALL_PRECLASSES$Grd.Pt.Unt ~ ALL_PRECLASSES$Max.Score_NA)
+
+table(ALL_PRECLASSES$Trig_Pcal.Grd.Unt,  useNA = "ifany")
+
+#Max.Score_NA 2496 missing
+#Trig_Pcal.Grd.Unt 4750 missing
++ 
+  lm.s <- lm(ALL_PRECLASSES$Grd.Pt.Unt ~ ALL_PRECLASSES$Col.Alg.Grd.Pt.Unt) 
+ lm.s <- lm(ALL_PRECLASSES$Grd.Pt.Unt ~ as.numeric(ALL_PRECLASSES$Trig_Pcal.Grd.Unt))
+ lm.s <- lm(ALL_PRECLASSES$Grd.Pt.Unt ~ ALL_PRECLASSES$STATS1.Grd.Pt.Unt)
+ lm.s <- lm(ALL_PRECLASSES$Grd.Pt.Unt ~ ALL_PRECLASSES$STATS2.Grd.Pt.Unt)
+ lm.s <- lm(ALL_PRECLASSES$Grd.Pt.Unt ~ ALL_PRECLASSES$CALC2.Grd.Pt.Unt)
+summary(lm.s)
+
+
+str(ALL_PRECLASSES)
