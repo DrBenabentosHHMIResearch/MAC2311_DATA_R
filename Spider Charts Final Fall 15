@@ -1,0 +1,263 @@
+TL.Final.15 <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/FINAL 2015 FALL/TL-FINAL 15.csv", na.strings = c("","NA"))
+TL.Final.15.Letters <- subset(TL.Final.15, select = c("X5a.Lt", "X5b.Lt", "X5c.Lt"))
+names(TL.Final.15.Letters)[names(TL.Final.15.Letters)=="X5a.Lt"] <- "5a Letter"
+names(TL.Final.15.Letters)[names(TL.Final.15.Letters)=="X5b.Lt"] <- "5b Letter"
+names(TL.Final.15.Letters)[names(TL.Final.15.Letters)=="X5c.Lt"] <- "5c Letter"
+table(TL.Final.15$X5a.Lt, useNA = "always")
+
+table(TL.Final.15.Letters$`5a Letter`)
+attributes(TL.Final.15.Letters$`5a Letter`)
+m <- ddply(TL.Final.15.Letters, .(), summarise, 
+           aA = (sum(`5a Letter` =="A", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           aB = (sum(`5a Letter` == "B", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           aC = (sum(`5a Letter` =="C", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           aD = (sum(`5a Letter` =="D", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           aE = (sum(`5a Letter` =="E", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           countall = aA+aB+aC+aD+aE)
+m$.id <- NULL
+m$countall <- NULL
+###diagnostic df##
+m.d <- data.frame(aA="30",aB="17.5",aC="30",aD="15",aE="7.5")
+m=rbind(rep(100,5) , rep(0,5) , m)
+m=rbind(m, m.d)
+m <- as.data.frame(sapply(m, as.numeric))
+rownames(m) <- c("1","2","Final","Diag.")
+m
+str(m)
+radarchart(m)
+colors_border=c( rgb(0.2,0.5,0.9,0.9), rgb(0.4,0.7,0.1,0.9) )
+colors_in=c( rgb(0.2,0.5,0.9,0.2), rgb(0.4,0.7,0.1,0.2) )
+radarchart( m  , axistype=1 , 
+            #custom polygon
+            pcol=colors_border , pfcol=colors_in , plwd=4 , plty=1,
+            #custom the grid
+            cglcol="grey", cglty=1, axislabcol="grey", caxislabels=c(0,100,25), cglwd=0.8,
+            #custom labels
+            vlcex=0.8 , title = "T.Leness Performance on Common Diagnostic Question 5a \n Correct Answer is E")
+legend(x=0.7, y=1, legend = rownames(m[-c(1,2),]), bty = "n", pch=20 , col=colors_in , text.col = "grey", cex=1.2, pt.cex=3)
+
+
+
+n <- ddply(TL.Final.15.Letters, .(), summarise,
+           bA = (sum(`5b Letter` =="A", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100),
+           bB = (sum(`5b Letter` == "B", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100),
+           bC = (sum(`5b Letter` =="C", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100),
+           bD = (sum(`5b Letter` =="D", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100),
+           bE = (sum(`5b Letter` =="E", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100))
+n$.id <- NULL
+n.d <- data_frame(bA="45",bB="20",bC="17.5",bD="2",bE="12.5")
+n=rbind(rep(100,5) , rep(0,5) , n)
+n=rbind(n, n.d)
+n <- as.data.frame(sapply(n, as.numeric))
+rownames(n) <- c("1","2","Final","Diag.")
+radarchart(n)
+colors_border=c( rgb(0.2,0.5,0.9,0.9), rgb(0.4,0.7,0.1,0.9) )
+colors_in=c( rgb(0.2,0.5,0.9,0.2), rgb(0.4,0.7,0.1,0.2) )
+radarchart( n  , axistype=1 , 
+            #custom polygon
+            pcol=colors_border , pfcol=colors_in , plwd=4 , plty=1,
+            #custom the grid
+            cglcol="grey", cglty=1, axislabcol="grey", caxislabels=seq(0,100,25), cglwd=0.8,
+            #custom labels
+            vlcex=0.8 , title = "T.Leness Performance on Common Diagnostic Question 5b \n Correct Answer is C")
+legend(x=0.7, y=1, legend = rownames(n[-c(1,2),]), bty = "n", pch=20 , col=colors_in , text.col = "grey", cex=1.2, pt.cex=3)
+
+
+
+o <- ddply(TL.Final.15.Letters, .(), summarise,
+           cA = (sum(`5c Letter` =="A", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100),
+           cB = (sum(`5c Letter` == "B", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100),
+           cC = (sum(`5c Letter` =="C", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100),
+           cD = (sum(`5c Letter` =="D", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100),
+           cE = (sum(`5c Letter` =="E", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100))
+o$.id <- NULL
+o.d <- data_frame(cA="7.69",cB="20.51",cC="38.46",cD="12.82",cE="20.51")
+o=rbind(rep(100,5) , rep(0,5) , o)
+o=rbind(o, o.d)
+o <- as.data.frame(sapply(o, as.numeric))
+rownames(o) <- c("1","2","Final","Diag.")
+
+radarchart(o)
+colors_border=c( rgb(0.2,0.5,0.9,0.9), rgb(0.4,0.7,0.1,0.9) )
+colors_in=c( rgb(0.2,0.5,0.9,0.2), rgb(0.4,0.7,0.1,0.2) )
+radarchart( o  , axistype=1 , 
+            #custom polygon
+            pcol=colors_border , pfcol=colors_in , plwd=4 , plty=1,
+            #custom the grid
+            cglcol="grey", cglty=1, axislabcol="grey", caxislabels=c(0,25,50,75,100), cglwd=0.8,
+            #custom labels
+            vlcex=0.8 , title = "T.Leness Performance on Common Diagnostic Question 5c \n Correct Answer is C")
+legend(x=0.7, y=1, legend = rownames(o[-c(1,2),]), bty = "n", pch=15 , col=colors_in , text.col = "grey", cex=1.2, pt.cex=3)
+
+### JULIAN EDWARDS FINAL ###
+JE.Final.15 <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/FINAL 2015 FALL/JE-FINAL 15.csv",  na.strings = c("","NA"))
+JE.Final.15.Letters <- subset(JE.Final.15, select = c("X5a.Lt", "X5b.Lt", "X5c.Lt"))
+names(JE.Final.15.Letters)[names(JE.Final.15.Letters)=="X5a.Lt"] <- "5a Letter"
+names(JE.Final.15.Letters)[names(JE.Final.15.Letters)=="X5b.Lt"] <- "5b Letter"
+names(JE.Final.15.Letters)[names(JE.Final.15.Letters)=="X5c.Lt"] <- "5c Letter"
+table(JE.Final.15$X5a.Lt, useNA = "always")
+
+a <- ddply(JE.Final.15.Letters, .(), summarise, 
+           aA = (sum(`5a Letter` =="A", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           aB = (sum(`5a Letter` == "B", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           aC = (sum(`5a Letter` =="C", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           aD = (sum(`5a Letter` =="D", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           aE = (sum(`5a Letter` =="E", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           countall = aA+aB+aC+aD+aE)
+a$.id <- NULL
+a$countall <- NULL
+a.d <- data.frame(aA="26.3",aB="15.7",aC="29",aD="13.2",aE="15.8")
+a=rbind(rep(100,5) , rep(0,5) , a)
+a=rbind(a, a.d)
+a <- as.data.frame(sapply(a, as.numeric))
+rownames(a) <- c("1","2","Final","Diag.")
+a
+str(a)
+radarchart(a)
+colors_border=c( rgb(0.2,0.5,0.9,0.9), rgb(0.4,0.7,0.1,0.9) )
+colors_in=c( rgb(0.2,0.5,0.9,0.2), rgb(0.4,0.7,0.1,0.2) )
+radarchart( a  , axistype=1 , 
+            #custom polygon
+            pcol=colors_border , pfcol=colors_in , plwd=4 , plty=1,
+            #custom the grid
+            cglcol="grey", cglty=1, axislabcol="grey", caxislabels=c(0,100,25), cglwd=0.8,
+            #custom labels
+            vlcex=0.8 , title = "J.Edward Performance on Common Diagnostic Question 5a \n Correct Answer is E")
+legend(x=0.7, y=1, legend = rownames(a[-c(1,2),]), bty = "n", pch=20 , col=colors_in , text.col = "grey", cex=1.2, pt.cex=3)
+
+b <- ddply(JE.Final.15.Letters, .(), summarise,
+           bA = (sum(`5b Letter` =="A", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100),
+           bB = (sum(`5b Letter` == "B", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100),
+           bC = (sum(`5b Letter` =="C", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100),
+           bD = (sum(`5b Letter` =="D", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100),
+           bE = (sum(`5b Letter` =="E", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100))
+b$.id <- NULL
+b.d <- data_frame(bA="53.8",bB="18",bC="5.1",bD="7.7",bE="15.4")
+b=rbind(rep(100,5) , rep(0,5) , b)
+b=rbind(b, b.d)
+b <- as.data.frame(sapply(b, as.numeric))
+rownames(b) <- c("1","2","Final","Diag.")
+radarchart(b)
+colors_border=c( rgb(0.2,0.5,0.9,0.9), rgb(0.4,0.7,0.1,0.9) )
+colors_in=c( rgb(0.2,0.5,0.9,0.2), rgb(0.4,0.7,0.1,0.2) )
+radarchart( b  , axistype=1 , 
+            #custom polygon
+            pcol=colors_border , pfcol=colors_in , plwd=4 , plty=1,
+            #custom the grid
+            cglcol="grey", cglty=1, axislabcol="grey", caxislabels=seq(0,100,25), cglwd=0.8,
+            #custom labels
+            vlcex=0.8 , title = "J.Edward Performance on Common Diagnostic Question 5b \n Correct Answer is C")
+legend(x=0.7, y=1, legend = rownames(b[-c(1,2),]), bty = "n", pch=20 , col=colors_in , text.col = "grey", cex=1.2, pt.cex=3)
+
+
+c <- ddply(JE.Final.15.Letters, .(), summarise,
+           cA = (sum(`5c Letter` =="A", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100),
+           cB = (sum(`5c Letter` == "B", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100),
+           cC = (sum(`5c Letter` =="C", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100),
+           cD = (sum(`5c Letter` =="D", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100),
+           cE = (sum(`5c Letter` =="E", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100))
+c$.id <- NULL
+c.d <- data_frame(cA="13.9",cB="13.9",cC="33.3",cD="16.7",cE="22.2")
+c=rbind(rep(100,5) , rep(0,5) , c)
+c=rbind(c, c.d)
+c <- as.data.frame(sapply(c, as.numeric))
+rownames(c) <- c("1","2","Final","Diag.")
+
+radarchart(c)
+colors_border=c( rgb(0.2,0.5,0.9,0.9), rgb(0.4,0.7,0.1,0.9) )
+colors_in=c( rgb(0.2,0.5,0.9,0.2), rgb(0.4,0.7,0.1,0.2) )
+radarchart( c  , axistype=1 , 
+            #custom polygon
+            pcol=colors_border , pfcol=colors_in , plwd=4 , plty=1,
+            #custom the grid
+            cglcol="grey", cglty=1, axislabcol="grey", caxislabels=c(0,25,50,75,100), cglwd=0.8,
+            #custom labels
+            vlcex=0.8 , title = "J.Edward Performance on Common Diagnostic Question 5c \n Correct Answer is C")
+legend(x=0.7, y=1, legend = rownames(c[-c(1,2),]), bty = "n", pch=15 , col=colors_in , text.col = "grey", cex=1.2, pt.cex=3)
+
+### T.Leness and J.Edwards combined (Summation)###
+TL.Final.15.Comb <- TL.Final.15.Letters
+TL.Final.15.Comb$Instructor <- rep("T.Leness",nrow(TL.Final.15.Comb)) 
+TL.Final.15.Comb <- TL.Final.15.Comb[,c(4,1,2,3)]
+
+JE.Final.15.Comb <- JE.Final.15.Letters
+JE.Final.15.Comb$Instructor <- rep("J.Edward",nrow(JE.Final.15.Comb))
+JE.Final.15.Comb <- JE.Final.15.Comb[,c(4,1,2,3)]
+
+JE.TL.Final.15.Comb <- rbind(TL.Final.15.Comb, JE.Final.15.Comb)
+table(JE.TL.Final.15.Comb$`5a Letter`)
+e <- ddply(JE.TL.Final.15.Comb, .(), summarise,
+           aA = (sum(`5a Letter` =="A", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           aB = (sum(`5a Letter` == "B", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           aC = (sum(`5a Letter` =="C", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           aD = (sum(`5a Letter` =="D", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           aE = (sum(`5a Letter` =="E", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100))
+e$.id <- NULL
+e.d <- data.frame(aA="28.2",aB="16.7",aC="29.5",aD="14.1",aE="11.5")
+e=rbind(rep(100,5) , rep(0,5) , e)
+e=rbind(e, e.d)
+e <- as.data.frame(sapply(e, as.numeric))
+rownames(e) <- c("1","2","Final","Diag.")
+e
+str(e)
+radarchart(e)
+colors_border=c( rgb(0.2,0.5,0.9,0.9), rgb(0.4,0.7,0.1,0.9) )
+colors_in=c( rgb(0.2,0.5,0.9,0.2), rgb(0.4,0.7,0.1,0.2) )
+radarchart( e , axistype=1 , 
+            #custom polygon
+            pcol=colors_border , pfcol=colors_in , plwd=4 , plty=1,
+            #custom the grid
+            cglcol="grey", cglty=1, axislabcol="grey", caxislabels=c(0,100,25), cglwd=0.8,
+            #custom labels
+            vlcex=0.8 , title = "J.Edward and T.Leness Performance on \n Common Diagnostic Question 5a. Correct Answer is E")
+legend(x=0.7, y=1, legend = rownames(e[-c(1,2),]), bty = "n", pch=20 , col=colors_in , text.col = "grey", cex=1.2, pt.cex=3)
+
+f <- ddply(JE.TL.Final.15.Comb, .(), summarise,
+           bA = (sum(`5b Letter` =="A", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100),
+           bB = (sum(`5b Letter` == "B", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100),
+           bC = (sum(`5b Letter` =="C", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100),
+           bD = (sum(`5b Letter` =="D", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100),
+           bE = (sum(`5b Letter` =="E", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100))
+f$.id <- NULL
+f.d <- data_frame(bA="49.4",bB="19",bC="11.4",bD="6.3",bE="13.9")
+f=rbind(rep(100,5) , rep(0,5) , f)
+f=rbind(f, f.d)
+f <- as.data.frame(sapply(f, as.numeric))
+rownames(f) <- c("1","2","Final","Diag.")
+radarchart(f)
+colors_border=c( rgb(0.2,0.5,0.9,0.9), rgb(0.4,0.7,0.1,0.9) )
+colors_in=c( rgb(0.2,0.5,0.9,0.2), rgb(0.4,0.7,0.1,0.2) )
+radarchart( f  , axistype=1 , 
+            #custom polygon
+            pcol=colors_border , pfcol=colors_in , plwd=4 , plty=1,
+            #custom the grid
+            cglcol="grey", cglty=1, axislabcol="grey", caxislabels=seq(0,100,25), cglwd=0.8,
+            #custom labels
+            vlcex=0.8 , title = "J.Edward and T.Leness Performance on \n Common Diagnostic Question 5b. Correct Answer is C")
+legend(x=0.7, y=1, legend = rownames(f[-c(1,2),]), bty = "n", pch=20 , col=colors_in , text.col = "grey", cex=1.2, pt.cex=3)
+
+g <- ddply(JE.TL.Final.15.Comb, .(), summarise,
+           cA = (sum(`5c Letter` =="A", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100),
+           cB = (sum(`5c Letter` == "B", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100),
+           cC = (sum(`5c Letter` =="C", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100),
+           cD = (sum(`5c Letter` =="D", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100),
+           cE = (sum(`5c Letter` =="E", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100))
+g$.id <- NULL
+g.d <- data_frame(cA="10.7",cB="17.3",cC="36",cD="14.7",cE="21.3")
+g=rbind(rep(100,5) , rep(0,5) , g)
+g=rbind(g, g.d)
+g <- as.data.frame(sapply(g, as.numeric))
+rownames(g) <- c("1","2","Final","Diag.")
+
+radarchart(g)
+colors_border=c( rgb(0.2,0.5,0.9,0.9), rgb(0.4,0.7,0.1,0.9) )
+colors_in=c( rgb(0.2,0.5,0.9,0.2), rgb(0.4,0.7,0.1,0.2) )
+radarchart( g  , axistype=1 , 
+            #custom polygon
+            pcol=colors_border , pfcol=colors_in , plwd=4 , plty=1,
+            #custom the grid
+            cglcol="grey", cglty=1, axislabcol="grey", caxislabels=c(0,25,50,75,100), cglwd=0.8,
+            #custom labels
+            vlcex=0.8 , title = "J.Edward and T.Leness Performance on \n Common Diagnostic Question 5c. Correct Answer is C")
+legend(x=0.7, y=1, legend = rownames(g[-c(1,2),]), bty = "n", pch=15 , col=colors_in , text.col = "grey", cex=1.2, pt.cex=3)
+
