@@ -1,0 +1,371 @@
+\documentclass[12pt]{article}
+\usepackage[margin=0.8in]{geometry}
+\usepackage{relsize,setspace}
+\usepackage{multicol}
+\usepackage{fancyhdr}
+\usepackage{xcolor}% http://ctan.org/pkg/xcolor
+ 
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{MAC2311}
+\lhead{Scale-Up Analysis}
+\rfoot{Page \thepage}
+\renewcommand{\headrulewidth}{0.4pt} %thickness of the header line
+\renewcommand{\headrule}{\hbox to\headwidth{%
+    \color{gray}\leaders\hrule height \headrulewidth\hfill}}
+\headheight 30pt \headsep 20pt
+\footskip 10.5pt 
+
+\begin{document}
+
+
+<<InitialProcedures, echo=FALSE, include=FALSE >>=
+
+library(gridExtra)
+library(ggplot2)
+library(psych)
+library(plyr)
+library(reshape)
+library(car)
+library(plotrix)
+library(rowr)
+library(dplyr)
+library(fmsb)
+library(plotly)
+library(scales)
+library(tidyr)
+library(knitr)
+
+MACDATA <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/requeriesmac2311/updatedtofall16MAC2311.csv")
+
+ls(MACDATA) ####Shows variables of data (Lists objects)
+nrow(MACDATA) ###### number of rows
+ncol(MACDATA) #### number of columns
+table(MACDATA$Sex)
+
+
+####SUMMARY FOR SAT SCORES
+
+  ### CREATING VARIABLE
+is.na(MACDATA$Max.Score) <- !MACDATA$Max.Score#### to rid 0 and convert them to NA
+MACDATA$Max.Score_NA <- MACDATA$Max.Score
+table(MACDATA$Max.Score_NA)  #### TO Check 0 were deleted
+
+summary(MACDATA$Max.Score_NA)
+
+
+describeBy(MACDATA$Max.Score_NA, MACDATA$Term, mat = TRUE) ### separated SAT max scores to term and did descr. stat.s
+
+@
+\begin{titlepage}\centering
+\topskip0pt
+\vspace*{\fill}
+\Huge MAC2311 Scale up Analysis \par
+\huge Comparing Flipped Classes in Calculus 1 \par
+\huge Florida International University \par
+\LARGE HHMI Institute \par
+\Large Rocio Benabentos - Director\par
+\Large Luis Valderrama - Research Assistant
+\vspace*{\fill}
+\end{titlepage}
+
+
+\fontsize{22}{22}
+\begin{center} \textbf{\underline{\LARGE Scale-Up Data for Fall 2015, Spring 2016, Summer 2016}}
+\par
+\par
+\large Luis Valderrama
+\par
+\par
+\textbf{\underline{\Large Introduction}}
+\par
+\scriptsize This lab report was made using student data from the Calculus 1 course MAC2311 at Florida International University. Many things that were tested were the effects of outside factors such as previous class data, SAT scores, and if they have repeated the class.Most information was done from the Fall 2011 semester to the Spring 2016 semester. Currently data from the Summer 2016 semester and the Fall 2016 are being used and will be compared to previous semesters.
+\par
+\textbf {\underline{\Large Plots Describing SAT Scores in MAC2311}}
+
+\end{center}
+<<plot1, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=5, fig.keep='high'>>=
+hist(MACDATA$Max.Score_NA, breaks=100, main="SAT Scores in MAC2311 Fall 11 to Summer 16", col = "cornflowerblue", col.main = "blue", xlab = "SAT Score", ylab = "# of Students") #### Changes main title, col adds color to bar, col.main adds color to main title. 
+title(main = "SAT Scores in MAC2311 Fall 11 to Summer 16") ### adds new main tittle plus the default title.
+@
+\scriptsize Plot 1. This graph is the demographic data of SAT scores in Calculus I from the Fall semester of 2011 to the Summer semester of 2016. 
+
+\break
+
+
+
+\fontsize{22}{22}
+<<plot2, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+boxplot1 <- ggplot(MACDATA, aes(x = as.factor(Term), y = Max.Score_NA)) + geom_boxplot(fill="lightgoldenrod1", color="navy") + 
+  labs(title= "SAT Math Scores MAC2311 Fall 11 to Summer 16", x="Semester", y="SAT Math Score") +
+  scale_x_discrete(labels = c("Fall 2011", "Spring 2012", "Summer 2012", "Fall 2012", "Spring 2013", "Summer 2013", "Fall 2013", "Spring 2014", "Summer 2014", "Fall 2014", "Spring 2015", "Summer 2015", "Fall 2015", "Spring 2016","Summer 2016", "Fall 2016")) +
+  theme(axis.text.x= element_text(colour= "darkblue", angle = 90, size = 8, vjust = 0.6), axis.text.y=element_text(colour = "darkblue", size = 8), title=element_text(colour = "Navy blue", size = 14))
+print(boxplot1)
+@
+\scriptsize Plot 2. This graph is the SAT data per term up until Summer 2016. They include the averages and the deviation of the SAT scores. 
+
+<<Table 1, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+
+table1 <- describeBy(MACDATA$Max.Score_NA, MACDATA$Term, mat = TRUE)
+table1$item <- NULL
+table1$vars <- NULL
+table1$median <- NULL
+table1$trimmed <- NULL
+table1$mad <- NULL
+table1$se <- NULL
+table1$kurtosis <- NULL
+table1$skew <- NULL
+table1$range <- NULL
+
+print(table1)
+@
+\textbf{\underline{\scriptsize Table 1
+}}
+\scriptsize This table shows the average, mean, and standard deviation of SAT scores for all semesters starting from Fall 2011 until Summer
+2016.
+
+\break
+
+
+\fontsize{22}{22}
+<<plot3, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+HHMIDATA <- subset(MACDATA, Term=="1158"|Term=="1161"|Term=="1165")
+HHMIDATA <- subset(HHMIDATA, Instr.ID=="1400541"|Instr.ID=="1400257"|Instr.ID=="1236179"|Instr.ID=="1067440")
+boxplot2 <- ggplot(subset(HHMIDATA, Term=="1158"), aes(x = Name.of.Instructor, y = Max.Score_NA)) + geom_boxplot(fill="lightgoldenrod1", color="navy") + 
+  labs(title= "HHMI SAT Math Scores MAC2311 Fall 15", x="Professor", y="SAT Math Score") +
+  theme(axis.text.x= element_text(colour= "darkblue", angle = 40, size = 12, vjust = 0.6), axis.text.y=element_text(colour = "darkblue", size = 12), title=element_text(colour = "Navy blue", size = 20))
+@
+
+
+<<Table 2, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+
+Ex1 <- subset(HHMIDATA, Term=="1158")
+table2 <- describeBy(Ex1$Max.Score_NA, Ex1$Name.of.Instructor)
+table2$item <- NULL
+table2$vars <- NULL
+table2$median <- NULL
+table2$trimmed <- NULL
+table2$mad <- NULL
+table2$se <- NULL
+table2$kurtosis <- NULL
+table2$skew <- NULL
+table2$range <- NULL
+
+print(table2)
+@
+
+
+
+\fontsize{22}{22}
+<<plot4, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+boxplot4 <- ggplot(subset(HHMIDATA, Term=="1161"), aes(x = Name.of.Instructor, y = Max.Score_NA)) + geom_boxplot(fill="lightgoldenrod1", color="navy") + 
+  labs(title= "HHMI SAT Math Scores MAC2311 Spring 16", x="Professor", y="SAT Math Score") +
+  theme(axis.text.x= element_text(colour= "darkblue", angle = 40, size = 12, vjust = 0.6), axis.text.y=element_text(colour = "darkblue", size = 12), title=element_text(colour = "Navy blue", size = 20))
+@
+
+\fontsize{22}{22}
+<<plot5, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+HHMIDATA2 <- subset(HHMIDATA, Term=="1158")
+FALLTD2015 <- subset(HHMIDATA2, Instr.ID=="1236179")
+FALLAW2015 <- subset(HHMIDATA2, Instr.ID=="1400541")
+FALLJE2015 <- subset(HHMIDATA2, Instr.ID=="1400257")
+FALLTL2015 <- subset(HHMIDATA2, Instr.ID=="1067440")
+
+
+# INSTRUCTOR IDS##
+### Anna Wlodarczyk: 1400541
+### Julian Edward: 1400257
+### Tedi Draghici: 1236179
+### Tom Leness: 1067440
+
+##HHMIDATA IS ONLY HHMI AFFILIATED PROFS MACDATA IS ALL PROFS##
+HHMIDATA2 <- subset(HHMIDATA, Term=="1158")
+
+### Box plot SAT Score used subset to only do Fall 15 HHMI Profs only##
+boxplot2 <- ggplot(HHMIDATA2, aes(x = Name.of.Instructor, y = Max.Score_NA)) + geom_boxplot(fill="lightgoldenrod1", color="navy") + 
+  labs(title= "HHMI SAT Math Scores MAC2311 Fall 15", x="Professor", y="SAT Math Score") +
+  theme(axis.text.x= element_text(colour= "darkblue", angle = 40, size = 12, vjust = 0.6), axis.text.y=element_text(colour = "darkblue", size = 12), title=element_text(colour = "Navy blue", size = 20))
+
+
+####  Box plot SAT Score used subset to only do Spring 16
+HHMIDATA3 <- subset(HHMIDATA, Term=="1161")
+boxplot4 <- ggplot(HHMIDATA3, aes(x = Name.of.Instructor, y = Max.Score_NA)) + geom_boxplot(fill="lightgoldenrod1", color="navy") + 
+  labs(title= "HHMI SAT Math Scores MAC2311 Spring 16", x="Professor", y="SAT Math Score") +
+  theme(axis.text.x= element_text(colour= "darkblue", angle = 40, size = 12, vjust = 0.6), axis.text.y=element_text(colour = "darkblue", size = 12), title=element_text(colour = "Navy blue", size = 20))
+
+
+## Adding all instructors so boxplot can have HHMI professors compared to all instructors
+##
+
+## WORKED ;_;~!!!!!!
+MACDATA3 <- subset(MACDATA,Term=="1158")
+###Here we are deleting the instructors that are HHMI affiliated so that when we look at the all professors it is only professors not affiliated at all with HHMI##
+MACDATA3 <- subset(MACDATA3, !Name.of.Instructor == "Anna Wlodarczyk")## IT WORKED CONDITIONAL FORMATTING ##
+MACDATA3 <- subset(MACDATA3, !Name.of.Instructor == "Julian Edward")
+MACDATA3 <- subset(MACDATA3, !Name.of.Instructor == "Tedi Draghici") 
+MACDATA3 <- subset(MACDATA3, !Name.of.Instructor == "Thomas Leness")
+
+MACDATA3$Name.of.Instructor <- "Other Instructors" ## Changed named of unaffiliated profs to all profs##
+MACDATA1158 <-rbind(HHMIDATA2, MACDATA3) ##Binded information of HHMI profs with All other profs##
+
+
+boxplot5 <- ggplot(MACDATA1158, aes(x = Name.of.Instructor, y = Max.Score_NA)) + geom_boxplot(fill="lightgoldenrod1", color="navy") + 
+  labs(title= "HHMI SAT Math Scores MAC2311 Fall 15", x="Professor", y="SAT Math Score") +
+  theme(axis.text.x= element_text(colour= "darkblue", angle = 40, size = 12, vjust = 0.6), axis.text.y=element_text(colour = "darkblue", size = 12), title=element_text(colour = "Navy blue", size = 14))
+print(boxplot5)
+@
+\scriptsize Plot 3. This graph is the SAT data for fall 2015 for  professors that are HHMI affiliated compared to all other professors teaching calculus that semester.
+\break
+\fontsize{22}{22}
+<<plot6, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+MACDATA4 <- subset(MACDATA, Term=="1161")
+MACDATA4 <- subset(MACDATA4, !Name.of.Instructor == "Anna Wlodarczyk")## IT WORKED CONDITIONAL FORMATTING ##
+MACDATA4 <- subset(MACDATA4, !Name.of.Instructor == "Julian Edward")
+MACDATA4 <- subset(MACDATA4, !Name.of.Instructor == "Tedi Draghici") 
+MACDATA4$Name.of.Instructor <- "Other Instructors"
+MACDATA1161 <-rbind(HHMIDATA3, MACDATA4)
+
+boxplot6 <- ggplot(MACDATA1161, aes(x = Name.of.Instructor, y = Max.Score_NA)) + geom_boxplot(fill="lightgoldenrod1", color="navy") + 
+  labs(title= "HHMI SAT Math Scores MAC2311 Spring 16", x="Professor", y="SAT Math Score") +
+  theme(axis.text.x= element_text(colour= "darkblue", angle = 40, size = 12, vjust = 0.6), axis.text.y=element_text(colour = "darkblue", size = 12), title=element_text(colour = "Navy blue", size = 14))
+print(boxplot6)
+
+@
+\scriptsize Plot 4. This graph is the SAT data for Spring 2016 for  professors that are HHMI affiliated compared to all other professors teaching calculus that semester.
+
+<<plot7, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+HHMIDATA4 <- subset(HHMIDATA, Term=="1165")
+MACDATA5 <- subset(MACDATA, Term=="1165")
+MACDATA5 <- subset(MACDATA5, !Name.of.Instructor == "Anna Wlodarczyk")## IT WORKED CONDITIONAL FORMATTING ##
+MACDATA5 <- subset(MACDATA5, !Name.of.Instructor == "Julian Edward")
+MACDATA5$Name.of.Instructor <- "Other Instructors"
+MACDATA1165 <-rbind(HHMIDATA4, MACDATA5)
+MACDATA1165 <- subset(MACDATA1165, !Name.of.Instructor == "Gerardo Aladro")
+MACDATA1165 <- subset(MACDATA1165, !Name.of.Instructor == "Gueo Grantcharov")
+MACDATA1165 <- subset(MACDATA1165, !Name.of.Instructor == "Kai Huang")
+MACDATA1165 <- subset(MACDATA1165, !Name.of.Instructor == "Mark Leckband")
+MACDATA1165 <- subset(MACDATA1165, !Name.of.Instructor == "Theodore Tachim Medjo")
+MACDATA1165 <- subset(MACDATA1165, !Name.of.Instructor == "Zhongming Wang")
+
+
+boxplot11 <- ggplot(MACDATA1165, aes(x = Name.of.Instructor, y = Max.Score_NA)) + geom_boxplot(fill="lightgoldenrod1", color="navy") + 
+  labs(title= "HHMI SAT Math Scores MAC2311 Summer 16", x="Professor", y="SAT Math Score") +
+  theme(axis.text.x= element_text(colour= "darkblue", angle = 40, size = 12, vjust = 0.6), axis.text.y=element_text(colour = "darkblue", size = 12), title=element_text(colour = "Navy blue", size = 14))
+print(boxplot11)
+@
+\textbf {\underline{\scriptsize Plot 5. }}
+
+\scriptsize This graph is the SAT data for Summer 2016 for  professors that are HHMI affiliated compared to all other professors teaching calculus that semester.
+
+\break
+
+\textbf {\underline{\Large Linear Models}}
+
+\textbf {\underline{\normalsize Linear Model 1}}
+\fontsize{10}{10}
+<<lm1, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+lm(MACDATA$Grd.Pt.Unt ~ MACDATA$Max.Score_NA + MACDATA$Sex + MACDATA$GPA)
+lm.r = lm(MACDATA$Grd.Pt.Unt ~ MACDATA$Max.Score_NA + MACDATA$Sex + MACDATA$GPA)
+summary(lm.r)
+print(lm.r)
+@
+\textbf{\underline{\scriptsize Linear Model 1.}}
+\scriptsize This linear model was done to see how significant the grade you get in Calculus depends on three factors: SATscore, Sex, and GPA. Here we see that all three factors are statistically significant in showing how likely they are to influence the grade obtained in Calculus 1 with data from Fall 2011 to Summer 2016.
+
+\break
+
+\textbf {\underline{\normalsize Linear Model 2}}
+
+\fontsize{8}{8}
+<<lm2, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+Upd1_1118_1161_1165 <- subset(MACDATA, Term == "1158"|Term=="1161"|Term=="1165")
+
+## LM on Aleks and Repeats
+lm.a = lm(Upd1_1118_1161_1165$Grd.Pt.Unt ~  
+            Upd1_1118_1161_1165$Max.Score_NA + Upd1_1118_1161_1165$Repeats)
+summary(lm.a)
+print(lm.a)
+
+@
+\textbf {\underline{\scriptsize Linear Model 2.}}
+\scriptsize For this linear model we are only looking at the semesters from Fall 2015 to Spring 2016. This linear model was done to see the significance of the grade you obtain in the class to just SAT scores and how many times the students repeated. When comparing it to only these two factors both factors are significant. There is a positive correlation with the max SAT score and also a negative correlation with repeated, but the r squared value is still less than .2.
+
+
+\break 
+
+\textbf {\underline{\normalsize Linear Model 3}}
+
+\fontsize{10}{10}
+<<lm3, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+
+lm.b = lm( Grd.Pt.Unt ~ Max.Score_NA + Sex + GPA + Repeats + as.factor(Instr.ID) + as.factor(Instr.ID):Max.Score_NA, data=MACDATA)
+summary(lm.b)
+
+@
+\textbf {\underline{\scriptsize Linear Model 3.}}
+
+\scriptsize This linear model was done to see the significance of the grade you obtain in the class to the following factors and the significance was checked:
+-SAT Scores........................Insignificant
+-Sex....................................Significant
+-GPA..................................Significant
+-Repeats in Calc 1..............Significant
+-Instructor effect.................Insignificant
+-Instructor and SAT scores...Insignificant
+Here we see that SAT scores, Sex, GPA, and Repeats do play a role but when comparing if there were any differences in instructors or instructors and the SAT scores then there was no significance. This is also not a good linear model because the R squared value was
+greater than 0.2
+
+\break
+
+\textbf {\underline{\normalsize Linear Model 4}}
+
+
+\fontsize{10}{10}
+<<lm4, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+lm.c = lm( Grd.Pt.Unt ~ Repeated., data=MAC2311_ALEKS_RPT_1118_1161)
+summary(lm.c)
+@
+\textbf {\underline{\scriptsize Linear Model 4.}}
+
+\scriptsize This linear model used repeats as the only variable and although a significant negative correlation was found comparing it to the grade obtained the r squared a lot lower than .2 so it is not a good model.
+
+\textbf {\underline{\normalsize Linear Model 5}}
+
+\fontsize{10}{10}
+<<lm5, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+lm.d = lm(MAC2311_ALEKS_RPT_1118_1161$Grd.Pt.Unt ~ MAC2311_ALEKS_RPT_1118_1161$Aleks.Score + MAC2311_ALEKS_RPT_1118_1161$Repeated.)
+summary(lm.d)
+@
+\textbf {\underline{\scriptsize Linear Model 5}}
+
+\break
+
+\textbf {\underline{\normalsize Linear Model 6}}
+
+\fontsize{10}{10}
+<<lm6, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+MAC2311_ALEKS_RPT_1118_1161$Sex.NA <- MAC2311_ALEKS_RPT_1118_1161$Sex
+MAC2311_ALEKS_RPT_1118_1161$Sex.NA[MAC2311_ALEKS_RPT_1118_1161$Sex.NA == "U"] <- NA 
+
+##subsetting MACDATA with Aleks and repeats to then bind diagnostic scores SPRING 16
+MAC2311_1116 <- subset(MAC2311_ALEKS_RPT_1118_1161, Term==1161)
+MAC2311_1116_Diag <- subset(MAC2311_1116, Section=="U03"|Section=="U08"|Section=="RXA"|Section=="U14")
+
+DIAG <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/MAC2311 Calc Diag.csv")
+##Adding new varible "ID" to match other dataset
+is.na(DIAG$Student.ID) <- !DIAG$Student.ID
+DIAG$ID <- DIAG$Student.ID
+
+##Binding depending on a variable SPRING 16
+DIAG_1116_MAC2311 <- merge(MAC2311_1116_Diag, DIAG, by="ID", all=T)##Gets rid of rows with NA
+DIAG_1116_MAC2311 <- DIAG_1116_MAC2311[-which(is.na(DIAG_1116_MAC2311$Last)),]
+
+##Lm of diagnostic scores SPRING 16
+lm.e = lm(DIAG_1116_MAC2311$Grd.Pt.Unt ~ as.numeric(sub("%", "", DIAG_1116_MAC2311$Total)))
+summary(lm.e)
+@
+\textbf {\underline{\scriptsize Linear Model 6}}
+
+\break
+
+
+\end{document}
