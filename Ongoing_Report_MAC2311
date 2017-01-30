@@ -119,8 +119,7 @@ table1$range <- NULL
 
 print(table1)
 @
-\textbf{\underline{\scriptsize Table 1
-}}
+\textbf{\underline{\scriptsize Table 1}}
 \scriptsize This table shows the average, mean, and standard deviation of SAT scores for all semesters starting from Fall 2011 until Summer
 2016.
 
@@ -129,32 +128,12 @@ print(table1)
 
 \fontsize{22}{22}
 <<plot3, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
-HHMIDATA <- subset(MACDATA, Term=="1158"|Term=="1161"|Term=="1165")
-HHMIDATA <- subset(HHMIDATA, Instr.ID=="1400541"|Instr.ID=="1400257"|Instr.ID=="1236179"|Instr.ID=="1067440")
+HHMIDATA <- subset(MACDATA, Term=="1158"|Term=="1161"|Term=="1165"|Term=="1168")
+HHMIDATA <- subset(HHMIDATA, Instr.ID=="1400541"|Instr.ID=="1400257"|Instr.ID=="1236179"|Instr.ID=="1067440"|Instr.ID=="1093825")
 boxplot2 <- ggplot(subset(HHMIDATA, Term=="1158"), aes(x = Name.of.Instructor, y = Max.Score_NA)) + geom_boxplot(fill="lightgoldenrod1", color="navy") + 
   labs(title= "HHMI SAT Math Scores MAC2311 Fall 15", x="Professor", y="SAT Math Score") +
   theme(axis.text.x= element_text(colour= "darkblue", angle = 40, size = 12, vjust = 0.6), axis.text.y=element_text(colour = "darkblue", size = 12), title=element_text(colour = "Navy blue", size = 20))
 @
-
-
-<<Table 2, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
-
-Ex1 <- subset(HHMIDATA, Term=="1158")
-table2 <- describeBy(Ex1$Max.Score_NA, Ex1$Name.of.Instructor)
-table2$item <- NULL
-table2$vars <- NULL
-table2$median <- NULL
-table2$trimmed <- NULL
-table2$mad <- NULL
-table2$se <- NULL
-table2$kurtosis <- NULL
-table2$skew <- NULL
-table2$range <- NULL
-
-print(table2)
-@
-
-
 
 \fontsize{22}{22}
 <<plot4, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
@@ -215,6 +194,24 @@ boxplot5 <- ggplot(MACDATA1158, aes(x = Name.of.Instructor, y = Max.Score_NA)) +
 print(boxplot5)
 @
 \scriptsize Plot 3. This graph is the SAT data for fall 2015 for  professors that are HHMI affiliated compared to all other professors teaching calculus that semester.
+
+
+<<Table 2, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+MACDATA1158$Name.of.Instructor <- factor(MACDATA1158$Name.of.Instructor) ##To remove factor levels after subsetting ##
+table2 <- describeBy(MACDATA1158$Max.Score_NA, MACDATA1158$Name.of.Instructor, mat = TRUE)
+table2$item <- NULL
+table2$vars <- NULL
+table2$median <- NULL
+table2$trimmed <- NULL
+table2$mad <- NULL
+table2$se <- NULL
+table2$kurtosis <- NULL
+table2$skew <- NULL
+table2$range <- NULL
+
+print(table2)
+@
+
 \break
 \fontsize{22}{22}
 <<plot6, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
@@ -232,6 +229,24 @@ print(boxplot6)
 
 @
 \scriptsize Plot 4. This graph is the SAT data for Spring 2016 for  professors that are HHMI affiliated compared to all other professors teaching calculus that semester.
+
+<<Table 3, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+MACDATA1161$Name.of.Instructor <- factor(MACDATA1161$Name.of.Instructor) ##To remove factor levels after subsetting ##
+table3 <- describeBy(MACDATA1161$Max.Score_NA, MACDATA1161$Name.of.Instructor, mat = TRUE)
+table3$item <- NULL
+table3$vars <- NULL
+table3$median <- NULL
+table3$trimmed <- NULL
+table3$mad <- NULL
+table3$se <- NULL
+table3$kurtosis <- NULL
+table3$skew <- NULL
+table3$range <- NULL
+
+print(table3)
+@
+
+
 
 <<plot7, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
 HHMIDATA4 <- subset(HHMIDATA, Term=="1165")
@@ -254,11 +269,68 @@ boxplot11 <- ggplot(MACDATA1165, aes(x = Name.of.Instructor, y = Max.Score_NA)) 
 print(boxplot11)
 @
 \textbf {\underline{\scriptsize Plot 5. }}
-
 \scriptsize This graph is the SAT data for Summer 2016 for  professors that are HHMI affiliated compared to all other professors teaching calculus that semester.
+
+<<Table 4, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+MACDATA1165$Name.of.Instructor <- factor(MACDATA1165$Name.of.Instructor) ##To remove factor levels after subsetting ##
+table4 <- describeBy(MACDATA1165$Max.Score_NA, MACDATA1165$Name.of.Instructor, mat = TRUE)
+table4$item <- NULL
+table4$vars <- NULL
+table4$median <- NULL
+table4$trimmed <- NULL
+table4$mad <- NULL
+table4$se <- NULL
+table4$kurtosis <- NULL
+table4$skew <- NULL
+table4$range <- NULL
+
+print(table4)
+@
+
 
 \break
 
+
+<<plot8, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+HHMIDATA5 <- subset(HHMIDATA, Term=="1168")
+MACDATA6 <- subset(MACDATA, Term=="1168")
+MACDATA6 <- subset(MACDATA6, !Name.of.Instructor == "Anna Wlodarczyk")## IT WORKED CONDITIONAL FORMATTING ##
+MACDATA6 <- subset(MACDATA6, !Name.of.Instructor == "Bao Qin Li")
+MACDATA6 <- subset(MACDATA6, !Name.of.Instructor == "Julian Edward")
+MACDATA6 <- subset(MACDATA6, !Name.of.Instructor == "Tedi Draghici")
+MACDATA6 <- subset(MACDATA6, !Name.of.Instructor == "Thomas Leness")
+MACDATA6$Name.of.Instructor <- "Other Instructors"
+MACDATA1168 <-rbind(HHMIDATA5, MACDATA6)
+
+
+boxplot12 <- ggplot(MACDATA1168, aes(x = Name.of.Instructor, y = Max.Score_NA)) + geom_boxplot(fill="lightgoldenrod1", color="navy") + 
+  labs(title= "HHMI SAT Math Scores MAC2311 Fall 16", x="Professor", y="SAT Math Score") +
+  theme(axis.text.x= element_text(colour= "darkblue", angle = 40, size = 12, vjust = 0.6), axis.text.y=element_text(colour = "darkblue", size = 12), title=element_text(colour = "Navy blue", size = 14))
+print(boxplot12)
+@
+\textbf {\underline{\scriptsize Plot 6. }}
+\scriptsize This graph is the SAT data for Fall 2016 for  professors that are HHMI affiliated compared to all other professors teaching calculus that semester.
+
+<<Table 5, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+MACDATA1168$Name.of.Instructor <- factor(MACDATA1168$Name.of.Instructor) ##To remove factor levels after subsetting ##
+table5 <- describeBy(MACDATA1168$Max.Score_NA, MACDATA1168$Name.of.Instructor, mat = TRUE)
+table5$item <- NULL
+table5$vars <- NULL
+table5$median <- NULL
+table5$trimmed <- NULL
+table5$mad <- NULL
+table5$se <- NULL
+table5$kurtosis <- NULL
+table5$skew <- NULL
+table5$range <- NULL
+
+print(table5)
+@
+
+
+
+
+\break
 \textbf {\underline{\Large Linear Models}}
 
 \textbf {\underline{\normalsize Linear Model 1}}
