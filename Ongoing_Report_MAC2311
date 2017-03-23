@@ -35,8 +35,11 @@ library(plotly)
 library(scales)
 library(tidyr)
 library(knitr)
+library(stargazer)
 
 MACDATA <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/requeriesmac2311/updatedtofall16MAC2311.csv")
+
+table(MACDATA$Max.Score_NA, useNA="always")
 
 ls(MACDATA) ####Shows variables of data (Lists objects)
 nrow(MACDATA) ###### number of rows
@@ -71,38 +74,41 @@ describeBy(MACDATA$Max.Score_NA, MACDATA$Term, mat = TRUE) ### separated SAT max
 
 
 \fontsize{22}{22}
-\begin{center} \textbf{\underline{\LARGE Scale-Up Data for Fall 2015, Spring 2016, Summer 2016}}
+\begin{center} \textbf{\underline{\large Scale-Up Data for Fall 2015, Spring 2016, Summer 2016, Fall 2016}}
 \par
-\par
-\large Luis Valderrama
+\vspace{5mm}
 \par
 \par
 \textbf{\underline{\Large Introduction}}
 \par
-\scriptsize This lab report was made using student data from the Calculus 1 course MAC2311 at Florida International University. Many things that were tested were the effects of outside factors such as previous class data, SAT scores, and if they have repeated the class.Most information was done from the Fall 2011 semester to the Spring 2016 semester. Currently data from the Summer 2016 semester and the Fall 2016 are being used and will be compared to previous semesters.
+\vspace{2mm}
+\normalsize This lab report was made using student data from the Calculus 1 course MAC2311 at Florida International University. Many things that were tested were the effects of outside factors such as previous class data, SAT scores, and if they have repeated the class.Most information was done from the Fall 2011 semester to the Fall 2016 semester. Currently data from the Summer 2016 semester and the Fall 2016 are being used and will be compared to previous semesters.
 \par
+\vspace{7mm}
 \textbf {\underline{\Large Plots Describing SAT Scores in MAC2311}}
 
 \end{center}
 <<plot1, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=5, fig.keep='high'>>=
 hist(MACDATA$Max.Score_NA, breaks=100, main="SAT Scores in MAC2311 Fall 11 to Summer 16", col = "cornflowerblue", col.main = "blue", xlab = "SAT Score", ylab = "# of Students") #### Changes main title, col adds color to bar, col.main adds color to main title. 
-title(main = "SAT Scores in MAC2311 Fall 11 to Summer 16") ### adds new main tittle plus the default title.
+#title(main = "SAT Scores in MAC2311 Fall 11 to Fall 16") ### adds new main tittle plus the default title.) 
 @
-\scriptsize Plot 1. This graph is the demographic data of SAT scores in Calculus I from the Fall semester of 2011 to the Summer semester of 2016. 
-
+\textbf{\underline{\normalsize Plot 1.}}
+\par
+\normalsize This graph represents the distribution of SAT scores in MAC2311 from the Fall 2011 to the Fall of 2016.
 \break
 
 
 
 \fontsize{22}{22}
-<<plot2, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
-boxplot1 <- ggplot(MACDATA, aes(x = as.factor(Term), y = Max.Score_NA)) + geom_boxplot(fill="lightgoldenrod1", color="navy") + 
-  labs(title= "SAT Math Scores MAC2311 Fall 11 to Summer 16", x="Semester", y="SAT Math Score") +
+<<plot2, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=3.9, fig.keep='high'>>=
+boxplot1 <- ggplot(MACDATA, aes(x = as.factor(Term), y = Max.Score_NA, fill=as.factor(Term))) + geom_boxplot()+ scale_fill_brewer(direction = 1, palette = "Paired")+ labs(title= "SAT Math Scores MAC2311 Fall 11 to Summer 16", x="Semester", y="SAT Math Score") + theme(legend.position = "none")+
   scale_x_discrete(labels = c("Fall 2011", "Spring 2012", "Summer 2012", "Fall 2012", "Spring 2013", "Summer 2013", "Fall 2013", "Spring 2014", "Summer 2014", "Fall 2014", "Spring 2015", "Summer 2015", "Fall 2015", "Spring 2016","Summer 2016", "Fall 2016")) +
-  theme(axis.text.x= element_text(colour= "darkblue", angle = 90, size = 8, vjust = 0.6), axis.text.y=element_text(colour = "darkblue", size = 8), title=element_text(colour = "Navy blue", size = 14))
+  theme(axis.text.x= element_text(colour= "darkblue", angle = 90, size = 8, vjust = 0.6), axis.text.y=element_text(colour = "darkblue", size = 8), title=element_text(colour = "Navy blue", size = 14)) 
 print(boxplot1)
 @
-\scriptsize Plot 2. This graph is the SAT data per term up until Summer 2016. They include the averages and the deviation of the SAT scores. 
+\textbf{\underline{\normalsize Plot 2.}}
+\par
+\normalsize The box plot represents the differential between individual responses for SAT Math Score distribution in different Calculus semesters. Thus, a positive score represents an individual that indicated a greater percentage in the SAT Math section. The middle bar represents the median. The upper and lower 'hinges' correspond to the first and third quartile (25th and 75th percentiles). 
 
 <<Table 1, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
 
@@ -119,9 +125,9 @@ table1$range <- NULL
 
 print(table1)
 @
-\textbf{\underline{\scriptsize Table 1}}
-\scriptsize This table shows the average, mean, and standard deviation of SAT scores for all semesters starting from Fall 2011 until Summer
-2016.
+\textbf{\underline{\normalsize Table 1}}
+\par
+\normalsize This table shows the mean (avg), standard deviation (sd), the median score, minimum scores, and maximum scores of SAT scores for all semesters starting from Fall 2011 until Fall 2016 corresponding to plot 2.
 
 \break
 
@@ -133,6 +139,12 @@ HHMIDATA <- subset(HHMIDATA, Instr.ID=="1400541"|Instr.ID=="1400257"|Instr.ID=="
 boxplot2 <- ggplot(subset(HHMIDATA, Term=="1158"), aes(x = Name.of.Instructor, y = Max.Score_NA)) + geom_boxplot(fill="lightgoldenrod1", color="navy") + 
   labs(title= "HHMI SAT Math Scores MAC2311 Fall 15", x="Professor", y="SAT Math Score") +
   theme(axis.text.x= element_text(colour= "darkblue", angle = 40, size = 12, vjust = 0.6), axis.text.y=element_text(colour = "darkblue", size = 12), title=element_text(colour = "Navy blue", size = 20))
+
+boxplot2 <- ggplot(HHMIDATA, aes(x = Name.of.Instructor, y = Max.Score_NA)) + geom_boxplot(fill="lightgoldenrod1", color="navy") + facet_grid(Term ~.)+
+  labs(title= "HHMI SAT Math Scores MAC2311 Fall 15", x="Professor", y="SAT Math Score") +
+  theme(axis.text.x= element_text(colour= "darkblue", angle = 40, size = 12, vjust = 0.6), axis.text.y=element_text(colour = "darkblue", size = 12), title=element_text(colour = "Navy blue", size = 20))
+
+
 @
 
 \fontsize{22}{22}
@@ -190,11 +202,10 @@ MACDATA1158 <-rbind(HHMIDATA2, MACDATA3) ##Binded information of HHMI profs with
 
 boxplot5 <- ggplot(MACDATA1158, aes(x = Name.of.Instructor, y = Max.Score_NA)) + geom_boxplot(fill="lightgoldenrod1", color="navy") + 
   labs(title= "HHMI SAT Math Scores MAC2311 Fall 15", x="Professor", y="SAT Math Score") +
-  theme(axis.text.x= element_text(colour= "darkblue", angle = 40, size = 12, vjust = 0.6), axis.text.y=element_text(colour = "darkblue", size = 12), title=element_text(colour = "Navy blue", size = 14))
-print(boxplot5)
-@
-\scriptsize Plot 3. This graph is the SAT data for fall 2015 for  professors that are HHMI affiliated compared to all other professors teaching calculus that semester.
+  theme(axis.text.x= element_text(colour= "darkblue", angle = 0, size = 10, vjust = 0.6), axis.text.y=element_text(colour = "darkblue", size = 12), title=element_text(colour = "Navy blue", size = 14))
 
+#\scriptsize Plot 3. This graph is the SAT data for fall 2015 for  professors that are HHMI affiliated compared to all other professors teaching calculus that semester.
+@
 
 <<Table 2, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
 MACDATA1158$Name.of.Instructor <- factor(MACDATA1158$Name.of.Instructor) ##To remove factor levels after subsetting ##
@@ -209,7 +220,9 @@ table2$kurtosis <- NULL
 table2$skew <- NULL
 table2$range <- NULL
 
-print(table2)
+
+#\textbf{\underline{\scriptsize Table 2}}
+#\scriptsize Here we can see the averages, standard deviation, minimum, and maximun ranges for the HHMI affiliated professors in the Fall of 2015. Row 1 corresponds to Professor Wlodarczyk, Row 2 corresponds to Professor Edward, Row 3 corresponds to Professor Draghici and Row 4 corresponds to Professor Leness#
 @
 
 \break
@@ -224,11 +237,11 @@ MACDATA1161 <-rbind(HHMIDATA3, MACDATA4)
 
 boxplot6 <- ggplot(MACDATA1161, aes(x = Name.of.Instructor, y = Max.Score_NA)) + geom_boxplot(fill="lightgoldenrod1", color="navy") + 
   labs(title= "HHMI SAT Math Scores MAC2311 Spring 16", x="Professor", y="SAT Math Score") +
-  theme(axis.text.x= element_text(colour= "darkblue", angle = 40, size = 12, vjust = 0.6), axis.text.y=element_text(colour = "darkblue", size = 12), title=element_text(colour = "Navy blue", size = 14))
-print(boxplot6)
+  theme(axis.text.x= element_text(colour= "darkblue", angle = 0, size = 10, vjust = 0.6), axis.text.y=element_text(colour = "darkblue", size = 12), title=element_text(colour = "Navy blue", size = 14))
 
-@
-\scriptsize Plot 4. This graph is the SAT data for Spring 2016 for  professors that are HHMI affiliated compared to all other professors teaching calculus that semester.
+
+#\scriptsize Plot 4. This graph is the SAT data for Spring 2016 for  professors that are HHMI affiliated compared to all other professors teaching calculus that semester.
+@ 
 
 <<Table 3, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
 MACDATA1161$Name.of.Instructor <- factor(MACDATA1161$Name.of.Instructor) ##To remove factor levels after subsetting ##
@@ -243,10 +256,10 @@ table3$kurtosis <- NULL
 table3$skew <- NULL
 table3$range <- NULL
 
-print(table3)
+
+#\textbf{\underline{\scriptsize Table 3}}
+#\scriptsize Here we can see the averages, standard deviation, minimum, and maximun ranges for the HHMI affiliated professors in the Spring of 2016. Row 1 corresponds to Professor Wlodarczyk, Row 2 corresponds to Professor Edward, Row 3 corresponds to Professor Draghici, and Row 4 corresponds to all other professors not HHMI affiliated.
 @
-
-
 
 <<plot7, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
 HHMIDATA4 <- subset(HHMIDATA, Term=="1165")
@@ -265,11 +278,12 @@ MACDATA1165 <- subset(MACDATA1165, !Name.of.Instructor == "Zhongming Wang")
 
 boxplot11 <- ggplot(MACDATA1165, aes(x = Name.of.Instructor, y = Max.Score_NA)) + geom_boxplot(fill="lightgoldenrod1", color="navy") + 
   labs(title= "HHMI SAT Math Scores MAC2311 Summer 16", x="Professor", y="SAT Math Score") +
-  theme(axis.text.x= element_text(colour= "darkblue", angle = 40, size = 12, vjust = 0.6), axis.text.y=element_text(colour = "darkblue", size = 12), title=element_text(colour = "Navy blue", size = 14))
-print(boxplot11)
+  theme(axis.text.x= element_text(colour= "darkblue", angle = 0, size = 10, vjust = 0.6), axis.text.y=element_text(colour = "darkblue", size = 12), title=element_text(colour = "Navy blue", size = 14))
+
+#\textbf {\underline{\scriptsize Plot 5. }}
+#\scriptsize This graph is the SAT data for Summer 2016 for  professors that are HHMI affiliated compared to all other professors teaching calculus that semester.
 @
-\textbf {\underline{\scriptsize Plot 5. }}
-\scriptsize This graph is the SAT data for Summer 2016 for  professors that are HHMI affiliated compared to all other professors teaching calculus that semester.
+
 
 <<Table 4, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
 MACDATA1165$Name.of.Instructor <- factor(MACDATA1165$Name.of.Instructor) ##To remove factor levels after subsetting ##
@@ -284,10 +298,10 @@ table4$kurtosis <- NULL
 table4$skew <- NULL
 table4$range <- NULL
 
-print(table4)
-@
 
-
+#\textbf{\underline{\scriptsize Table 4}}
+#\scriptsize Here we can see the averages, standard deviation, minimum, and maximun ranges for the HHMI affiliated professors in the Summer of 2016. Row 1 corresponds to Professor Wlodarczyk, Row 2 corresponds to Professor Edward, and Row 3 corresponds to all other professors not HHMI affiliated.
+ @
 \break
 
 
@@ -305,11 +319,12 @@ MACDATA1168 <-rbind(HHMIDATA5, MACDATA6)
 
 boxplot12 <- ggplot(MACDATA1168, aes(x = Name.of.Instructor, y = Max.Score_NA)) + geom_boxplot(fill="lightgoldenrod1", color="navy") + 
   labs(title= "HHMI SAT Math Scores MAC2311 Fall 16", x="Professor", y="SAT Math Score") +
-  theme(axis.text.x= element_text(colour= "darkblue", angle = 40, size = 12, vjust = 0.6), axis.text.y=element_text(colour = "darkblue", size = 12), title=element_text(colour = "Navy blue", size = 14))
-print(boxplot12)
+  theme(axis.text.x= element_text(colour= "darkblue", angle = 0, size = 10, vjust = 0.6), axis.text.y=element_text(colour = "darkblue", size = 12), title=element_text(colour = "Navy blue", size = 14))
+
+#\textbf {\underline{\scriptsize Plot 6. }}
+#\scriptsize This graph is the SAT data for Fall 2016 for  professors that are HHMI affiliated compared to all other professors teaching calculus that semester.
 @
-\textbf {\underline{\scriptsize Plot 6. }}
-\scriptsize This graph is the SAT data for Fall 2016 for  professors that are HHMI affiliated compared to all other professors teaching calculus that semester.
+
 
 <<Table 5, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
 MACDATA1168$Name.of.Instructor <- factor(MACDATA1168$Name.of.Instructor) ##To remove factor levels after subsetting ##
@@ -324,7 +339,70 @@ table5$kurtosis <- NULL
 table5$skew <- NULL
 table5$range <- NULL
 
+
+
+#\textbf{\underline{\scriptsize Table 4}}
+#\scriptsize Here we can see the averages, standard deviation, minimum, and maximun ranges for the HHMI affiliated professors in the Fall of 2016. Row 1 corresponds to Professor Wlodarczyk, Row 2 corresponds to Professor Bao, Row 3 corresponds to Professor Edward, Row 4 corresponds to Professor Draghici, and Row 5 corresponds to all other professors not HHMI affiliated.
+@ 
+ 
+<<plot09, echo=FALSE, fig.align='center', warning=F,fig.width=7.3, fig.height=8.6, fig.keep='high'>>=
+grid.arrange(boxplot5,boxplot6,boxplot11,boxplot12, ncol=1)
+@
+\textbf{\underline{\normalsize Plots 3-6}}
+\par
+\normalsize These box plots represents the differential between individual responses for SAT Math Score distribution in different Calculus semeters (Fall 2015 - Fall 2016) with their corresponding professors. Thus, a positive score represents an individual that indicated a greater percentage in the SAT Math section. The middle bar represents the median. The upper and lower 'hinges' correspond to the first and third quartile (25th and 75th percentiles).
+\break
+
+
+<<<<plot00001, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+print(table2)
+@
+\textbf{\underline{\normalsize Table 2}}
+\normalsize Here we can see the averages, standard deviation, minimum, and maximun ranges for the HHMI affiliated professors in the Fall of 2015. Row 1 corresponds to Professor Wlodarczyk, Row 2 corresponds to Professor Edward, Row 3 corresponds to Professor Draghici and Row 4 corresponds to Professor Leness. Corresponds to plot 3.
+
+<<<<plot001, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+print(table3)
+@
+\textbf{\underline{\normalsize Table 3}}
+\normalsize Here we can see the averages, standard deviation, minimum, and maximun ranges for the HHMI affiliated professors in the Spring of 2016. Row 1 corresponds to Professor Wlodarczyk, Row 2 corresponds to Professor Edward, Row 3 corresponds to Professor Draghici, and Row 4 corresponds to all other professors not HHMI affiliated. Corresponds to plot 4. 
+
+<<<<plot01, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+print(table4)
+@
+\textbf{\underline{\normalsize Table 4}}
+\normalsize Here we can see the averages, standard deviation, minimum, and maximun ranges for the HHMI affiliated professors in the Summer of 2016. Row 1 corresponds to Professor Wlodarczyk, Row 2 corresponds to Professor Edward, and Row 3 corresponds to all other professors not HHMI affiliated. Correspons to plot 5. 
+
+<<<<plot199, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
 print(table5)
+@
+\textbf{\underline{\normalsize Table 5}}
+\normalsize Here we can see the averages, standard deviation, minimum, and maximun ranges for the HHMI affiliated professors in the Fall of 2016. Row 1 corresponds to Professor Wlodarczyk, Row 2 corresponds to Professor Bao, Row 3 corresponds to Professor Edward, Row 4 corresponds to Professor Draghici, and Row 5 corresponds to all other professors not HHMI affiliated. Corresponds to plot 6. 
+
+
+
+<<plot9, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+ boxplot.5 <- ggplot(MACDATA, aes(x=HHMIActive, y= Grd.Pt.Unt)) + geom_boxplot(fill="lightgoldenrod1", color="navy") + labs(title= "Distribution of MAC2311 Final Grade", x="",y="Final grade") + scale_x_discrete(labels=c("Scale-up", "Regular"))+ theme(axis.text.x= element_text(colour= "darkblue", angle = 0, size = 12, vjust = 0.6), axis.text.y=element_text(colour = "darkblue", size = 12), title=element_text(colour = "Navy blue", size = 20))
+print(boxplot.5)
+
+@
+\textbf{\underline{\normalsize Plot 7}}
+\par
+\normalsize This box plot represents the differential between individual grades in Calculus semeters with their corresponding type of learning. Thus, a positive score represents an individual that indicated a greater percentage in the SAT Math section. The middle bar represents the median. The upper and lower 'hinges' correspond to the first and third quartile (25th and 75th percentiles).
+
+<<Table 6, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+
+table6 <- describeBy(MACDATA$Grd.Pt.Unt, MACDATA$HHMIActive, mat = TRUE)
+table6$item <- NULL
+table6$vars <- NULL
+table6$median <- NULL
+table6$trimmed <- NULL
+table6$mad <- NULL
+table6$se <- NULL
+table6$kurtosis <- NULL
+table6$skew <- NULL
+table6$range <- NULL
+
+print(table6)
 @
 
 
@@ -338,11 +416,12 @@ print(table5)
 <<lm1, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
 lm(MACDATA$Grd.Pt.Unt ~ MACDATA$Max.Score_NA + MACDATA$Sex + MACDATA$GPA)
 lm.r = lm(MACDATA$Grd.Pt.Unt ~ MACDATA$Max.Score_NA + MACDATA$Sex + MACDATA$GPA)
+
 summary(lm.r)
-print(lm.r)
+
 @
-\textbf{\underline{\scriptsize Linear Model 1.}}
-\scriptsize This linear model was done to see how significant the grade you get in Calculus depends on three factors: SATscore, Sex, and GPA. Here we see that all three factors are statistically significant in showing how likely they are to influence the grade obtained in Calculus 1 with data from Fall 2011 to Summer 2016.
+\textbf{\underline{\normalsize Linear Model 1.}}
+\normalsize This linear model was done to see how significant the grade you get in Calculus depends on three factors: SATscore, Sex, and GPA. Here we see that all three factors are statistically significant in showing how likely they are to influence the grade obtained in Calculus 1 with data from Fall 2011 to Summer 2016.
 
 \break
 
@@ -350,7 +429,7 @@ print(lm.r)
 
 \fontsize{8}{8}
 <<lm2, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
-Upd1_1118_1161_1165 <- subset(MACDATA, Term == "1158"|Term=="1161"|Term=="1165")
+Upd1_1118_1161_1165 <- subset(MACDATA, Term == "1158"|Term=="1161"|Term=="1165"|Term=="1168")
 
 ## LM on Aleks and Repeats
 lm.a = lm(Upd1_1118_1161_1165$Grd.Pt.Unt ~  
