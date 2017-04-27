@@ -100,25 +100,26 @@ boxplot1 <- ggplot(MACDATA, aes(x = as.factor(Term), y = Max.Score_NA, fill=as.f
 \section{{\textbf {\underline{\Large Plots}}}}
 \subsection{\textbf {\large Histogram Depicting SAT Scores in MAC2311}}
 
-<<plot1, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=5, fig.keep='high'>>=
+<<plot1, echo=FALSE, fig.align='center', warning=F,fig.width=7, fig.height=5, fig.keep='high'>>=
 hist(MACDATA$Max.Score_NA, breaks=40, main="SAT Scores in MAC2311 Fall 11 to Fall 16", col = "#7be5ad", col.main = "Navy blue", xlab = "SAT Score", ylab = "# of Students") #### Changes main title, col adds color to bar, col.main adds color to main title. 
 #title(main = "SAT Scores in MAC2311 Fall 11 to Fall 16") ### adds new main tittle plus the default title.) 
 @
 \textbf{\underline{\normalsize Plot 1.}}
 \par
-\normalsize This graph represents the distribution of SAT scores in MAC2311 from the Fall 2011 to the Fall of 2016.
+\normalsize This graph represents the distribution of SAT scores in MAC2311 from the Fall 2011 to the Fall 2016.
 \break
 
 
 \subsection {\textbf{\large Boxplot Depicting SAT Scores in MAC2311 per Semester.}}
 \fontsize{22}{22}
-<<plot2, echo=FALSE, fig.align='center', warning=F,fig.width=7.5, fig.height=4.5, fig.keep='high'>>=
+<<plot2, echo=FALSE, fig.align='center', warning=F,fig.width=7.5, fig.height=6.5, fig.keep='high'>>=
 print(boxplot1)
 @
 \textbf{\underline{\normalsize Plot 2.}}
 \par
 \normalsize The box plot represents the differential between individual responses for SAT Math Score distribution in different Calculus semesters. Thus, a positive score represents an individual that indicated a greater percentage in the SAT Math section. The middle bar represents the median. The upper and lower 'hinges' correspond to the first and third quartile (25th and 75th percentiles). 
 
+\newpage
 \textbf{\underline{\normalsize Table 1}}
 <<Table 1, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
 
@@ -136,9 +137,6 @@ table1$range <- NULL
 print(table1)
 @
 
-\break
-
-
 \textbf{\underline{\normalsize Table 1}}
 \normalsize 
 This table shows the:
@@ -154,7 +152,7 @@ This table shows the:
 \item minimum scores
 \item maximum SAT scores 
 \end{itemize}}
-for all semesters starting from Fall 2011 until Fall 2016 corresponding to plot 2.
+For all semesters starting from Fall 2011 until Fall 2016 corresponding to plot 2.
 
 \break
 
@@ -372,7 +370,7 @@ grid.arrange(boxplot5,boxplot6, ncol=1)
 \textbf{\underline{\normalsize Plots 3-4}}
 \par
 \normalsize These box plots represents the differential between individual responses for SAT Math Score distribution in different Calculus semeters (Fall 2015 - Spring 2016) with their corresponding professors. Thus, a positive score represents an individual that indicated a greater percentage in the SAT Math section. The middle bar represents the median. The upper and lower 'hinges' correspond to the first and third quartile (25th and 75th percentiles).
-\break
+
 \newpage
 <<plot0009, echo=FALSE, fig.align='center', warning=F,fig.width=7.3, fig.height=8, fig.keep='high'>>=
 grid.arrange(boxplot11,boxplot12, ncol=1)
@@ -411,12 +409,12 @@ print(table4)
 print(table5)
 @
 
-\newpage
 \subsection {\textbf{\large Boxplot Depicting Effect of Learning Style to Grade Obtained in MAC2311.}}
 <<plot9, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
  boxplot.5 <- ggplot(MACDATA, aes(x=HHMIActive, y= Grd.Pt.Unt, fill=HHMIActive)) + geom_boxplot() + labs(title= "Distribution of MAC2311 Final Grade", x="",y="Final grade") + scale_x_discrete(labels=c("Scale-up", "Regular"))+ theme(axis.text.x= element_text(colour= "darkblue", angle = 0, size = 12, vjust = 0.6), axis.text.y=element_text(colour = "darkblue", size = 14), title=element_text(colour = "Navy blue", size = 20)) + theme(legend.position = "none") + scale_fill_manual(values = c("#7bc5e5", "#7be5ad"))
 
 print(boxplot.5)
+
 
 @
 \textbf{\underline{\normalsize Plot 7}}
@@ -439,7 +437,203 @@ table6$range <- NULL
 print(table6)
 @
 
+\subsection {\textbf{\large Spiderplots Depicting Improvement of Three Questions from Diagnostic to Final Exam in the Fall 2015 Semester.}}
 
+
+<<<<plot209, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.0, fig.keep='high'>>=
+TL.Final.15 <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/FINAL 2015 FALL/TL-FINAL 15.csv", na.strings = c("","NA"))
+TL.Final.15.Letters <- subset(TL.Final.15, select = c("X5a.Lt", "X5b.Lt", "X5c.Lt"))
+names(TL.Final.15.Letters)[names(TL.Final.15.Letters)=="X5a.Lt"] <- "5a Letter"
+names(TL.Final.15.Letters)[names(TL.Final.15.Letters)=="X5b.Lt"] <- "5b Letter"
+names(TL.Final.15.Letters)[names(TL.Final.15.Letters)=="X5c.Lt"] <- "5c Letter"
+
+
+m <- ddply(TL.Final.15.Letters, .(), summarise, 
+           aA = (sum(`5a Letter` =="A", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           aB = (sum(`5a Letter` == "B", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           aC = (sum(`5a Letter` =="C", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           aD = (sum(`5a Letter` =="D", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           aE = (sum(`5a Letter` =="E", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           countall = aA+aB+aC+aD+aE)
+
+
+m$.id <- NULL
+m$countall <- NULL
+###diagnostic df##
+m.d <- data.frame(aA="30",aB="17.5",aC="30",aD="15",aE="7.5")
+m=rbind(rep(100,5) , rep(0,5) , m)
+m=rbind(m, m.d)
+m <- as.data.frame(sapply(m, as.numeric))
+rownames(m) <- c("1","2","Final","Diag.")
+
+
+n <- ddply(TL.Final.15.Letters, .(), summarise,
+           bA = (sum(`5b Letter` =="A", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100),
+           bB = (sum(`5b Letter` == "B", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100),
+           bC = (sum(`5b Letter` =="C", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100),
+           bD = (sum(`5b Letter` =="D", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100),
+           bE = (sum(`5b Letter` =="E", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100))
+n$.id <- NULL
+n.d <- data_frame(bA="45",bB="20",bC="17.5",bD="2",bE="12.5")
+n=rbind(rep(100,5) , rep(0,5) , n)
+n=rbind(n, n.d)
+n <- as.data.frame(sapply(n, as.numeric))
+
+
+o <- ddply(TL.Final.15.Letters, .(), summarise,
+           cA = (sum(`5c Letter` =="A", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100),
+           cB = (sum(`5c Letter` == "B", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100),
+           cC = (sum(`5c Letter` =="C", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100),
+           cD = (sum(`5c Letter` =="D", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100),
+           cE = (sum(`5c Letter` =="E", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100))
+o$.id <- NULL
+o.d <- data_frame(cA="7.69",cB="20.51",cC="38.46",cD="12.82",cE="20.51")
+o=rbind(rep(100,5) , rep(0,5) , o)
+o=rbind(o, o.d)
+o <- as.data.frame(sapply(o, as.numeric))
+rownames(o) <- c("1","2","Final","Diag.")
+
+
+
+JE.Final.15 <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/FINAL 2015 FALL/JE-FINAL 15.csv",  na.strings = c("","NA"))
+JE.Final.15.Letters <- subset(JE.Final.15, select = c("X5a.Lt", "X5b.Lt", "X5c.Lt"))
+names(JE.Final.15.Letters)[names(JE.Final.15.Letters)=="X5a.Lt"] <- "5a Letter"
+names(JE.Final.15.Letters)[names(JE.Final.15.Letters)=="X5b.Lt"] <- "5b Letter"
+names(JE.Final.15.Letters)[names(JE.Final.15.Letters)=="X5c.Lt"] <- "5c Letter"
+
+
+a <- ddply(JE.Final.15.Letters, .(), summarise, 
+           aA = (sum(`5a Letter` =="A", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           aB = (sum(`5a Letter` == "B", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           aC = (sum(`5a Letter` =="C", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           aD = (sum(`5a Letter` =="D", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           aE = (sum(`5a Letter` =="E", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           countall = aA+aB+aC+aD+aE)
+a$.id <- NULL
+a$countall <- NULL
+a.d <- data.frame(aA="26.3",aB="15.7",aC="29",aD="13.2",aE="15.8")
+a=rbind(rep(100,5) , rep(0,5) , a)
+a=rbind(a, a.d)
+a <- as.data.frame(sapply(a, as.numeric))
+rownames(a) <- c("1","2","Final","Diag.")
+
+
+b <- ddply(JE.Final.15.Letters, .(), summarise,
+           bA = (sum(`5b Letter` =="A", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100),
+           bB = (sum(`5b Letter` == "B", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100),
+           bC = (sum(`5b Letter` =="C", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100),
+           bD = (sum(`5b Letter` =="D", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100),
+           bE = (sum(`5b Letter` =="E", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100))
+b$.id <- NULL
+b.d <- data_frame(bA="53.8",bB="18",bC="5.1",bD="7.7",bE="15.4")
+b=rbind(rep(100,5) , rep(0,5) , b)
+b=rbind(b, b.d)
+b <- as.data.frame(sapply(b, as.numeric))
+rownames(b) <- c("1","2","Final","Diag.")
+
+
+c <- ddply(JE.Final.15.Letters, .(), summarise,
+           cA = (sum(`5c Letter` =="A", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100),
+           cB = (sum(`5c Letter` == "B", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100),
+           cC = (sum(`5c Letter` =="C", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100),
+           cD = (sum(`5c Letter` =="D", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100),
+           cE = (sum(`5c Letter` =="E", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100))
+c$.id <- NULL
+c.d <- data_frame(cA="13.9",cB="13.9",cC="33.3",cD="16.7",cE="22.2")
+c=rbind(rep(100,5) , rep(0,5) , c)
+c=rbind(c, c.d)
+c <- as.data.frame(sapply(c, as.numeric))
+rownames(c) <- c("1","2","Final","Diag.")
+
+
+TL.Final.15.Comb <- TL.Final.15.Letters
+TL.Final.15.Comb$Instructor <- rep("T.Leness",nrow(TL.Final.15.Comb)) 
+TL.Final.15.Comb <- TL.Final.15.Comb[,c(4,1,2,3)]
+
+JE.Final.15.Comb <- JE.Final.15.Letters
+JE.Final.15.Comb$Instructor <- rep("J.Edward",nrow(JE.Final.15.Comb))
+JE.Final.15.Comb <- JE.Final.15.Comb[,c(4,1,2,3)]
+
+JE.TL.Final.15.Comb <- rbind(TL.Final.15.Comb, JE.Final.15.Comb)
+e <- ddply(JE.TL.Final.15.Comb, .(), summarise,
+           aA = (sum(`5a Letter` =="A", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           aB = (sum(`5a Letter` == "B", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           aC = (sum(`5a Letter` =="C", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           aD = (sum(`5a Letter` =="D", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100),
+           aE = (sum(`5a Letter` =="E", na.rm=TRUE)/sum(!is.na(`5a Letter`))*100))
+e$.id <- NULL
+e.d <- data.frame(aA="28.2",aB="16.7",aC="29.5",aD="14.1",aE="11.5")
+e=rbind(rep(100,5) , rep(0,5) , e)
+e=rbind(e, e.d)
+e <- as.data.frame(sapply(e, as.numeric))
+rownames(e) <- c("1","2","Final","Diag.")
+
+
+colors_border=c( rgb(0.2,0.5,0.9,0.9), rgb(0.4,0.7,0.1,0.9) )
+colors_in=c( rgb(0.2,0.5,0.9,0.2), rgb(0.4,0.7,0.1,0.2) )
+sppl1 <- radarchart( e , axistype=1 , 
+            #custom polygon
+            pcol=colors_border , pfcol=colors_in , plwd=4 , plty=1,
+            #custom the grid
+            cglcol="black", cglty=1, axislabcol="black", caxislabels=seq(0,1,25), cglwd=0.8,
+            #custom labels
+            vlcex=0.8 , title = "J.Edward and T.Leness Performance on \n Common Diagnostic Question 5a. Correct Answer is E")
+legend(x=0.7, y=1, legend = rownames(e[-c(1,2),]), bty = "n", pch=20 , col=colors_in , text.col = "grey", cex=1.2, pt.cex=3)
+
+f <- ddply(JE.TL.Final.15.Comb, .(), summarise,
+           bA = (sum(`5b Letter` =="A", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100),
+           bB = (sum(`5b Letter` == "B", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100),
+           bC = (sum(`5b Letter` =="C", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100),
+           bD = (sum(`5b Letter` =="D", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100),
+           bE = (sum(`5b Letter` =="E", na.rm=TRUE)/sum(!is.na(`5b Letter`))*100))
+f$.id <- NULL
+f.d <- data_frame(bA="49.4",bB="19",bC="11.4",bD="6.3",bE="13.9")
+f=rbind(rep(100,5) , rep(0,5) , f)
+f=rbind(f, f.d)
+f <- as.data.frame(sapply(f, as.numeric))
+rownames(f) <- c("1","2","Final","Diag.")
+
+colors_border=c( rgb(0.2,0.5,0.9,0.9), rgb(0.4,0.7,0.1,0.9) )
+colors_in=c( rgb(0.2,0.5,0.9,0.2), rgb(0.4,0.7,0.1,0.2) )
+sppl2<- radarchart( f  , axistype=1 , 
+            #custom polygon
+            pcol=colors_border , pfcol=colors_in , plwd=4 , plty=1,
+            #custom the grid
+            cglcol="black", cglty=1, axislabcol="black", caxislabels=seq(0,1,25), cglwd=0.8,
+            #custom labels
+            vlcex=0.8 , title = "J.Edward and T.Leness Performance on \n Common Diagnostic Question 5b. Correct Answer is C")
+legend(x=0.7, y=1, legend = rownames(f[-c(1,2),]), bty = "n", pch=20 , col=colors_in , text.col = "grey", cex=1.2, pt.cex=3)
+
+g <- ddply(JE.TL.Final.15.Comb, .(), summarise,
+           cA = (sum(`5c Letter` =="A", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100),
+           cB = (sum(`5c Letter` == "B", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100),
+           cC = (sum(`5c Letter` =="C", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100),
+           cD = (sum(`5c Letter` =="D", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100),
+           cE = (sum(`5c Letter` =="E", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100))
+g$.id <- NULL
+g.d <- data_frame(cA="10.7",cB="17.3",cC="36",cD="14.7",cE="21.3")
+g=rbind(rep(100,5) , rep(0,5) , g)
+g=rbind(g, g.d)
+g <- as.data.frame(sapply(g, as.numeric))
+rownames(g) <- c("1","2","Final","Diag.")
+
+colors_border=c( rgb(0.2,0.5,0.9,0.9), rgb(0.4,0.7,0.1,0.9) )
+colors_in=c( rgb(0.2,0.5,0.9,0.2), rgb(0.4,0.7,0.1,0.2) )
+sppl3 <- radarchart( g  , axistype=1 , 
+            #custom polygon
+            pcol=colors_border , pfcol=colors_in , plwd=4 , plty=1,
+            #custom the grid
+            cglcol="black", cglty=1, axislabcol="black", caxislabels=seq(0,1,25), cglwd=0.8,
+            #custom labels
+            vlcex=0.8 , title = "J.Edward and T.Leness Performance on \n Common Diagnostic Question 5c. Correct Answer is C")
+legend(x=0.7, y=1, legend = rownames(g[-c(1,2),]), bty = "n", pch=15 , col=colors_in , text.col = "grey", cex=1.2, pt.cex=3)
+
+
+@
+\textbf{\underline{\normalsize Spiderplots 1-3}}
+\par
+\normalsize
+These plots are used to see the comparison of three questions used on both the diagnostic exam given at the beginning of the semester and the final exam at the end of the semester. In the diagnostic results you see that there is a tendency for student choices to be any of the five answer choices but once you look at the final results most students narrow it down to two choices, including the correct answer. You can also see that the students who pick the correct answer increases. 
 
 
 \break
@@ -447,10 +641,42 @@ print(table6)
 \par
 \subsection{\textbf{\large Variables}}
 \par
-\normalsize Here are the list of variables used for the linear models. A short description of what each variable entails is also given
-\beginitemize{}
+\normalsize Here are the list of variables used for the linear models. A short description of what each variable entails is also given.
 
-\par
+{\begin{itemize}
+ \item Grd.Pt.Unt
+    {\begin{itemize}
+    \item Corresponds to the grade the student obtained in their Calculus 1 class.
+    \end{itemize}}
+    \item Max.Score.NA
+    {\begin{itemize}
+    \item Corresponds to the Highest Mathematics SAT score obatined by the student.
+    \end{itemize}}
+    \item SexM
+    {\begin{itemize}
+    \item The students whose sex is Male. The rest of the responses are seen as females.
+    \end{itemize}}
+    \item GPA
+    {\begin{itemize}
+    \item The GPA the student had ... taking MAC2311.
+    \end{itemize}}
+    \item Repeats
+    {\begin{itemize}
+    \item This corresponds to how many times the student has taken MAC2311.
+    \end{itemize}}
+\item Intr.ID
+    {\begin{itemize}
+    \item This correspons to the given ID's for the intstructors teaching MAC2311.
+    \end{itemize}}
+\item HHMIActive
+    {\begin{itemize}
+    \item This corresponds to the type of learning in the Calculus 1 class. Scale-up means they have an active learning environment while traditional means that no changes have been made to the lecture class
+    \end{itemize}}
+    \end{itemize}}
+
+\normalsize These variables where mainly used to see their impact on the grade obtained in MAC2311 (Grd.Pt.Unt). Some as shown by the following linear models were seen significantly affecting grades positively or negatively and some were seen as not significantly affecting the grade at all. 
+
+\newpage
 \subsection{\textbf{\large Linear Model 1}}
 \fontsize{10}{10}
 <<lm1, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
@@ -462,7 +688,7 @@ summary(lm.r)
 @
 \textbf{\underline{\normalsize Linear Model 1.}}
 \par
-\normalsize This linear model was done to see how significant the grade you get in Calculus depends on three factors: SATscore, Sex, and GPA. Here we see that all three factors are statistically significant in showing how likely they are to influence the grade obtained in Calculus 1 with data from Fall 2011 to Summer 2016.
+\normalsize This linear model was done to see how significant the grade you get in Calculus depends on three factors: SATscore, Sex, and GPA. Here we see that all three factors are statistically significant in showing how likely they are to influence the grade obtained in Calculus 1 with data from Fall 2011 to Fall 2016.
 
 \break
 
@@ -481,7 +707,7 @@ print(lm.a)
 @
 \textbf {\underline{\normalsize Linear Model 2.}}
 \par
-\normalsize For this linear model we are only looking at the semesters from Fall 2015 to Spring 2016. This linear model was done to see the significance of the grade you obtain in the class to just SAT scores and how many times the students repeated. When comparing it to only these two factors both factors are significant. There is a positive correlation with the max SAT score and also a negative correlation with repeated, but the r squared value is still less than .2.
+\normalsize For this linear model we are only looking at the semesters from Fall 2015 to Fall 2016. This linear model was done to see the significance of the grade you obtain in the class to just SAT scores and how many times the students repeated. When comparing it to only these two factors both factors are significant. There is a positive correlation with the max SAT score and also a negative correlation with repeated, but the r squared value is still less than .2.
 
 
 \break 
@@ -489,21 +715,24 @@ print(lm.a)
 \subsection{\textbf{\large Linear Model 3}}
 
 \fontsize{10}{10}
-<<lm3, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+<<lm3, echo=TRUE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
 
-lm.b = lm( Grd.Pt.Unt ~ Max.Score_NA + Sex + GPA + Repeats + as.factor(Instr.ID) + as.factor(Instr.ID):Max.Score_NA, data=MACDATA)
-summary(lm.b)
+lm.b = lm( Grd.Pt.Unt ~ Max.Score_NA + Sex + GPA + Repeats + as.factor(Instr.ID) +
+             as.factor(Instr.ID):Max.Score_NA, data=MACDATA)
 
 @
 \textbf {\underline{\normalsize Linear Model 3.}}
 
 \normalsize This linear model was done to see the significance of the grade you obtain in the class to the following factors and the significance was checked:
--SAT Scores........................Insignificant
--Sex....................................Significant
--GPA..................................Significant
--Repeats in Calc 1..............Significant
--Instructor effect.................Insignificant
--Instructor and SAT scores...Insignificant
+
+{\begin{itemize}
+  \item SAT Scores................................Insignificant
+  \item Sex............................................Significant
+  \item GPA..........................................Significant
+  \item Repeats in Calc 1......................Significant
+  \item Instructor effect.........................Insignificant
+  \item Instructor and SAT scores.........Insignificant
+ \end{itemize}}
 Here we see that SAT scores, Sex, GPA, and Repeats do play a role but when comparing if there were any differences in instructors or instructors and the SAT scores then there was no significance. This is also not a good linear model because the R squared value was
 greater than 0.2
 
@@ -514,23 +743,27 @@ greater than 0.2
 
 \fontsize{10}{10}
 <<lm4, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
-lm.c = lm( Grd.Pt.Unt ~ Repeated., data=MAC2311_ALEKS_RPT_1118_1161)
+lm.c = lm( Grd.Pt.Unt ~ Repeats, data=MACDATA)
 summary(lm.c)
+
+MAC2311_ALEKS_RPT_1118_1161 <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/MAC2311_ALEKS_RPT_1118_1161.csv")
+
 @
 \textbf {\underline{\normalsize Linear Model 4.}}
 
-\normalsize This linear model used repeats as the only variable and although a significant negative correlation was found comparing it to the grade obtained the r squared a lot lower than .2 so it is not a good model.
+\normalsize This linear model used repeats as the only variable and although a significant negative correlation was found comparing it to the grade obtained the r squared a lot lower than .2 signifying that it is not a good model.
 
 \subsection{\textbf{\large Linear Model 5}}
 
 \fontsize{10}{10}
-<<lm5, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
-lm.d = lm(MAC2311_ALEKS_RPT_1118_1161$Grd.Pt.Unt ~ MAC2311_ALEKS_RPT_1118_1161$Aleks.Score + MAC2311_ALEKS_RPT_1118_1161$Repeated.)
-summary(lm.d)
+<<lm5, echo=TRUE, warning=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+lm.d = lm(MAC2311_ALEKS_RPT_1118_1161$Grd.Pt.Unt ~ MAC2311_ALEKS_RPT_1118_1161$Aleks.Score
+          + MAC2311_ALEKS_RPT_1118_1161$Repeated.)
 @
 \textbf {\underline{\normalsize Linear Model 5}}
 
-\break
+\normalsize This linear model tested the relationship between the grade obtained in Calculus 1 with ALEKS scores and repeats. Nothing singificant was found becuase most of the students had missing ALEKS scores as not all of them had taken the ALEKS exam. 
+\newpage
 
 \subsection{\textbf {\large Linear Model 6}}
 
@@ -558,7 +791,362 @@ summary(lm.e)
 @
 \textbf {\underline{\normalsize Linear Model 6}}
 
-\break
+\normalsize This linear model compares the significance of the grade obtained in Calculus 1 in the Spring 2016 semester with the corresponding Diagnostic exam. It wass seen that the grade obatined on the Diagnostic exam did correlate to the grade received although the R squared value is still less than 0.2.
 
+\subsection{\textbf {\large Linear Model 7}}
+
+
+<<lm7, echo=TRUE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+lm.f = lm(DIAG_1116_MAC2311$Grd.Pt.Unt ~ 
+            as.numeric(sub("%", "", DIAG_1116_MAC2311$Exp...Corr.1)) + 
+            as.numeric(sub("%", "", DIAG_1116_MAC2311$F.G...Corr.1 )) + 
+            as.numeric(sub("%", "", DIAG_1116_MAC2311$Geo...Corr.1 )) + 
+            as.numeric(sub("%", "", DIAG_1116_MAC2311$LE.I.Corr)) + 
+            as.numeric(sub("%", "", DIAG_1116_MAC2311$L.EF...Corr.1)) + 
+            as.numeric(sub("%", "", DIAG_1116_MAC2311$Poly...Corr.1 )) + 
+            as.numeric(sub("%", "", DIAG_1116_MAC2311$RE...Corr.1 )) + 
+            as.numeric(sub("%", "", DIAG_1116_MAC2311$Trig...Corr.1 )))
+@
+
+\textbf {\underline{\normalsize Linear Model 7}}
+
+\normalsize This linear model is comparing to check if any of the specific elements tested in the diagnostic exam had any correlation to the diagnostic exam. This was done with data of the semester Spring 2016 and the only element that was seen to be correlated to gradepoint average were questions dealing with Functions and Graphs. This linear model had an R-Squared value of less than .2 meaning it's not a good descriptor of correlation. 
+
+
+\newpage
+\subsection{\textbf {\large Linear Model 8}}
+
+
+<<lm8, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+
+MAC2311_1158 <- subset(MAC2311_ALEKS_RPT_1118_1161, Term==1158)
+MAC2311_1158_Diag <- subset(MAC2311_1158, Section=="U21"|Section=="U12"|Section=="U02"|Section=="U06")
+
+Diag1158 <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/Calc Diag 1158.csv")
+##Binding depending on a variable Fall 2015
+DIAG_1158_MAC2311 <-merge(MAC2311_1158_Diag, Diag1158, by="ID", all=T)
+DIAG_1158_MAC2311 <- DIAG_1158_MAC2311[-which(is.na(DIAG_1158_MAC2311$Last)),]
+DIAG_1158_MAC2311$Total <- (DIAG_1158_MAC2311$Total*100)
+
+lm.g = lm(DIAG_1158_MAC2311$Grd.Pt.Unt ~ DIAG_1158_MAC2311$Total)
+summary(lm.g)
+summary(lm.g)
+
+DIAG_1158_MAC2311$CD...Corr.1 <- (DIAG_1158_MAC2311$CD...Corr.1*100)
+DIAG_1158_MAC2311$Exp...Corr.1 <- (DIAG_1158_MAC2311$Exp...Corr.1*100)
+DIAG_1158_MAC2311$F.G...Corr.1 <- (DIAG_1158_MAC2311$F.G...Corr.1*100)
+DIAG_1158_MAC2311$Geo...Corr.1 <- (DIAG_1158_MAC2311$Geo...Corr.1*100)
+DIAG_1158_MAC2311$LE.I.Corr <- (DIAG_1158_MAC2311$LE.I.Corr*100)
+DIAG_1158_MAC2311$L.EF...Corr.1 <- (DIAG_1158_MAC2311$L.EF...Corr.1*100)
+DIAG_1158_MAC2311$Poly...Corr.1 <- (DIAG_1158_MAC2311$Poly...Corr.1*100)
+DIAG_1158_MAC2311$RE...Corr.1 <- (DIAG_1158_MAC2311$RE...Corr.1*100)
+DIAG_1158_MAC2311$Trig...Corr.1 <- (DIAG_1158_MAC2311$Trig...Corr.1*100)
+
+
+@
+\textbf {\underline{\normalsize Linear Model 8}}
+
+\normalsize This linear model compares the significance of the grade obtained in Calculus 1 in the Fall 2015 semester with the corresponding Diagnostic exam. It wass seen that the grade obatined on the Diagnostic exam did correlate to the grade received although the R squared value is still less than 0.2.
+
+\newpage
+
+\subsection{\textbf {\large Linear Model 9}}
+
+
+<<lm9, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+
+lm.h = lm( DIAG_1158_MAC2311$Grd.Pt.Unt ~ 
+             DIAG_1158_MAC2311$Exp...Corr.1 + DIAG_1158_MAC2311$F.G...Corr.1 +
+             DIAG_1158_MAC2311$Geo...Corr.1 + 
+             DIAG_1158_MAC2311$LE.I.Corr + 
+             DIAG_1158_MAC2311$L.EF...Corr.1 + 
+             DIAG_1158_MAC2311$Poly...Corr.1 + 
+             DIAG_1158_MAC2311$RE...Corr.1 + 
+             DIAG_1158_MAC2311$Trig...Corr.1)
+summary(lm.h)
+
+@
+\textbf {\underline{\normalsize Linear Model 9}}
+
+\normalsize This linear model is comparing to check if any of the specific elements tested in the diagnostic exam had any correlation to the diagnostic exam. This was done with data of the semester Fall 2015 and none of the elements were seen have a significant correlation with the grade obtained. 
+
+\newpage
+
+\subsection{\textbf {\large Linear Models 10-12}}
+
+
+<<lm10, echo=TRUE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+
+SCALEUP.1158.1168 <- subset(MACDATA, Term=="1158"|Term=="1161"|Term=="1165"|Term=="1168")
+
+lm.j <- lm( SCALEUP.1158.1168$Grd.Pt.Unt ~ SCALEUP.1158.1168$HHMIActive)
+
+lm.k <- lm(SCALEUP.1158.1168$Grd.Pt.Unt ~ SCALEUP.1158.1168$Max.Score_NA 
+           + SCALEUP.1158.1168$HHMIActive )
+
+lm.l <- lm(SCALEUP.1158.1168$Grd.Pt.Unt ~ SCALEUP.1158.1168$Max.Score_NA
+           + SCALEUP.1158.1168$Sex
+           + SCALEUP.1158.1168$GPA
+           + SCALEUP.1158.1168$HHMIActive)
+
+lm.n <- lm(SCALEUP.1158.1168$Grd.Pt.Unt ~ SCALEUP.1158.1168$Max.Score_NA 
+           + SCALEUP.1158.1168$Sex 
+           + SCALEUP.1158.1168$HHMIActive)
+
+
+@
+\textbf {\underline{\normalsize Linear Models 10-12}}
+
+\normalsize These linear models were tested to see whether there was a realtionship between the grade obrained in Calculus and the type of learning used. Other factors were inputed to see if the effect changed. In all trials, the relationship between grade obtained and the type of learning was not significant. This was done only looking from the Fall 2015 semester up until the Fall 2016 semester. 
+
+\subsection{\textbf {\large Linear Model 13}}
+
+
+<<lm13, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+
+ONLY.SCALEUP <- subset(MACDATA, Instr.ID=="1236179"|Instr.ID=="1067440"
+                       |Instr.ID=="1400257")
+
+lm.p <- lm(ONLY.SCALEUP$Grd.Pt.Unt ~ ONLY.SCALEUP$Max.Score_NA + ONLY.SCALEUP$HHMIActive)
+summary(lm.p)
+
+
+@
+\textbf {\underline{\normalsize Linear Model 13}}
+
+\normalsize
+
+\subsection{\textbf {\large Linear Model 14}}
+
+
+<<lm14, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+
+## TRIG+PRECALC###
+MAC1147 <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/Pre Reqs/MAC1147_1071-1161_FIU_JD_CRSE_GRADE_DATA_2_476707713-10.csv")
+MAC1147_RPT <- MAC1147[c("ID","Term")] ## adding only specific colums from old dataframe to new dataframe ##
+## testng repeat count 
+MAC1147_RPT$Repeats <- 0L
+i <- which(duplicated(MAC1147_RPT$ID))
+MAC1147_RPT$Repeats[i] <- with(MAC1147_RPT[i, ], unsplit(lapply(split(ID, ID), seq_along), ID))
+
+MAC1147_RPT$T_P.Grd.Pt.Unt <- MAC1147$Grd.Pt.Unt
+names(MAC1147_RPT)[names(MAC1147_RPT)=="Repeats"] <- "Trig.PCal.Rpt"
+names(MAC1147_RPT)[names(MAC1147_RPT)=="Term"] <- "Trig.PCal.Term"
+
+MAC1147_RPT <- MAC1147_RPT[order(MAC1147_RPT$Trig.PCal.Rpt) , ]  ##Keeps most recent repeats wihtout having duplicates##
+MAC1147_RPT <- MAC1147_RPT[!duplicated(MAC1147_RPT$ID, fromLast = TRUE) , ]
+
+
+MAC1147$Repeats <- MAC1147_RPT$Repeats
+
+#COLLEGE ALGEBRA###
+MAC1105 <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/Pre Reqs/College_Algebra_1071_1161.csv")
+MAC1105_RPT <- MAC1105[c("ID","Term")]
+MAC1105_RPT$Repeats <- 0L
+i <- which(duplicated(MAC1105_RPT$ID))
+MAC1105_RPT$Repeats[i] <- with(MAC1105_RPT[i, ], unsplit(lapply(split(ID, ID), seq_along), ID))
+
+MAC1105_RPT$Grd.Pt.Unt <- MAC1105$Grd.Pt.Unt
+names(MAC1105_RPT)[names(MAC1105_RPT)=="Repeats"] <- "Col.Alg.Rpt"
+names(MAC1105_RPT)[names(MAC1105_RPT)=="Grd.Pt.Unt"] <- "Col.Alg.Grd.Pt.Unt"
+names(MAC1105_RPT)[names(MAC1105_RPT)=="Term"] <- "Col.Alg.Term"
+
+MAC1105_RPT <- MAC1105_RPT[order(MAC1105_RPT$Col.Alg.Rpt),]
+MAC1105_RPT <- MAC1105_RPT[!duplicated(MAC1105_RPT$ID, fromLast = TRUE) , ]
+
+MAC1105$Repeats <- MAC1105_RPT$Repeats
+
+## TRIGONOMETRY ##
+MAC1114 <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/Pre Reqs/MAC1114_1071-1161_FIU_JD_CRSE_GRADE_DATA_2_476707713-10-4.csv")
+MAC1114_RPT <- MAC1114[c("ID","Term")]
+MAC1114_RPT$Repeats <- 0L
+i <- which(duplicated(MAC1114_RPT$ID))
+MAC1114_RPT$Repeats[i] <- with(MAC1114_RPT[i, ], unsplit(lapply(split(ID, ID), seq_along), ID))
+
+MAC1114_RPT$Trig.Grd.Pt.Unt <- MAC1114$Grd.Pt.Unt
+names(MAC1114_RPT)[names(MAC1114_RPT)=="Repeats"] <- "Trig.Rpt"
+names(MAC1114_RPT)[names(MAC1114_RPT)=="Term"] <- "Trig.Term"
+
+MAC1114_RPT <- MAC1114_RPT[order(MAC1114_RPT$Trig.Rpt),]
+MAC1114_RPT <- MAC1114_RPT[!duplicated(MAC1114_RPT$ID, fromLast = TRUE) , ]
+
+
+MAC1114$Repeats <- MAC1114_RPT$Repeats
+
+### PRECALC ##
+MAC1140 <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/Pre Reqs/MAC1140_1071-1161_FIU_JD_CRSE_GRADE_DATA_2_476707713-10.csv")
+MAC1140_RPT <- MAC1140[c("ID","Term")]
+MAC1140_RPT$Repeats <- 0L
+i <- which(duplicated(MAC1140_RPT$ID))
+MAC1140_RPT$Repeats[i] <- with(MAC1140_RPT[i, ], unsplit(lapply(split(ID, ID), seq_along), ID))
+
+MAC1140_RPT$PCal.Grd.Pt.Unt <- MAC1140$Grd.Pt.Unt
+names(MAC1140_RPT)[names(MAC1140_RPT)=="Repeats"] <- "PCal.Rpt"
+names(MAC1140_RPT)[names(MAC1140_RPT)=="Term"] <- "PCal.Term"
+
+MAC1140_RPT <- MAC1140_RPT[order(MAC1140_RPT$PCal.Rpt),]
+MAC1140_RPT <- MAC1140_RPT[!duplicated(MAC1140_RPT$ID, fromLast = TRUE) , ]
+
+
+MAC1140$Repeats <- MAC1140_RPT$Repeats
+
+## STATS 1 ##
+STATS1 <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/Pre Reqs/STA3111_1118-1161_FIU_JD_CRSE_GRADE_DATA_2_476707713-9.csv")
+STATS1_RPT <- STATS1[c("ID","Term")]
+STATS1_RPT$Repeats <- 0L
+i <- which(duplicated(STATS1_RPT$ID))
+STATS1_RPT$Repeats[i] <- with(STATS1_RPT[i, ], unsplit(lapply(split(ID, ID), seq_along), ID))
+
+STATS1_RPT$STATS1.Grd.Pt.Unt <- STATS1$Grd.Pt.Unt
+names(STATS1_RPT)[names(STATS1_RPT)=="Trig.PCal.Rpt"] <- "STATS1.Rpt"
+names(STATS1_RPT)[names(STATS1_RPT)=="Trig.PCal.Term"] <- "STATS1.Term"
+
+STATS1_RPT <- STATS1_RPT[order(STATS1_RPT$STATS1.Rpt),]  ##Keeps most recent repeats wihtout having duplicates##
+STATS1_RPT <- STATS1_RPT[!duplicated(STATS1_RPT$ID, fromLast = TRUE) , ]
+
+STATS1$Repeats <- STATS1_RPT$Repeats
+
+## STATS 2 ##
+STATS2 <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/Pre Reqs/STA3112_1118-1161_FIU_JD_CRSE_GRADE_DATA_2_476707713-9-2.csv")
+STATS2_RPT <- STATS2[c("ID","Term")]
+STATS2_RPT$Repeats <- 0L
+i <- which(duplicated(STATS2_RPT$ID))
+STATS2_RPT$Repeats[i] <- with(STATS2_RPT[i, ], unsplit(lapply(split(ID, ID), seq_along), ID))
+
+STATS2_RPT$STATS2.Grd.Pt.Unt <- STATS2$Grd.Pt.Unt
+names(STATS2_RPT)[names(STATS2_RPT)=="Repeats"] <- "STATS2.Rpt"
+names(STATS2_RPT)[names(STATS2_RPT)=="Term"] <- "STATS2.Term"
+
+STATS2_RPT <- STATS2_RPT[order(STATS2_RPT$STATS2.Rpt) , ]  ##Keeps most recent repeats wihtout having duplicates##
+STATS2_RPT <- STATS2_RPT[!duplicated(STATS2_RPT$ID, fromLast = TRUE) , ]
+
+STATS2$Repeats <- STATS2_RPT$Repeats
+
+## CALC 2 ##
+CALC2 <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/Pre Reqs/MAC2312_1118-1161_FIU_JD_CRSE_GRADE_DATA_2_476707713-9.csv")
+CALC2_RPT <- CALC2[c("ID","Term")]
+CALC2_RPT$Repeats <- 0L
+i <- which(duplicated(CALC2_RPT$ID))
+CALC2_RPT$Repeats[i] <- with(CALC2_RPT[i, ], unsplit(lapply(split(ID, ID), seq_along), ID))
+
+CALC2_RPT$CALC2.Grd.Pt.Unt <- CALC2$Grd.Pt.Unt
+names(CALC2_RPT)[names(CALC2_RPT)=="Repeats"] <- "CALC2.Rpt"
+names(CALC2_RPT)[names(CALC2_RPT)=="Term"] <- "CALC2.Term"
+
+CALC2_RPT <- CALC2_RPT[order(CALC2_RPT$CALC2.Rpt) , ]  ##Keeps most recent repeats wihtout having duplicates##
+CALC2_RPT <- CALC2_RPT[!duplicated(CALC2_RPT$ID, fromLast = TRUE) , ]
+
+
+CALC2$Repeats <- CALC2_RPT[c("Repeats")]
+
+## Merging Pre reqs into MAC2311_Aleks_rpt
+ALL_CLASSES <- merge(MAC1105_RPT, MAC1114_RPT, all=TRUE)
+ALL_CLASSES <- merge(ALL_CLASSES, MAC1140_RPT, all=TRUE)
+ALL_CLASSES <- merge(ALL_CLASSES, MAC1147_RPT, all=TRUE)
+ALL_CLASSES <- merge(ALL_CLASSES, STATS1_RPT, all=TRUE)
+ALL_CLASSES <- merge(ALL_CLASSES, STATS2_RPT, all=TRUE)
+ALL_CLASSES <- merge(ALL_CLASSES, CALC2_RPT, all=TRUE)
+
+ALL_PRECLASSES <- merge(MAC2311_ALEKS_RPT_1118_1161,ALL_CLASSES, by="ID", all.x=TRUE)
+
+##linear model for previous classes##
+
+TrigPCalc <- merge(MAC1140_RPT, MAC1114_RPT, all=TRUE)
+TrigPCalc <- merge(TrigPCalc, MAC1147_RPT, all=TRUE)
+TrigPCalc$PCal.Term <-NULL
+TrigPCalc$PCal.Rpt <- NULL
+TrigPCalc$Trig.Term <- NULL
+TrigPCalc$Trig.Rpt <- NULL
+TrigPCalc$Trig.PCal.Term <- NULL
+TrigPCalc$Trig.PCal.Rpt <- NULL
+# One way to do it##
+TrigPCalc[-1] <- lapply(TrigPCalc[-1], function(x) as.numeric(as.character(x)))
+TrigPCalc$Avg.Trig.PCal <-  rowMeans(TrigPCalc[-1], na.rm=TRUE)
+TrigPCalc$Avg
+
+ALL_PRECLASSES <- join(ALL_PRECLASSES, TrigPCalc, type="left")
+ALL_PRECLASSES$Avg.Trig.PCal <- NULL
+## Second way to do it
+TrigPCalc$Avg.Trig.Pcalc <- with(TrigPCalc, ifelse(is.na(Trig.Grd.Pt.Unt) | is.na(PCal.Grd.Pt.Unt), T_P.Grd.Pt.Unt, (Trig.Grd.Pt.Unt + PCal.Grd.Pt.Unt) / 2))
+table(TrigPCalc$T_P.Grd.Pt.Unt, useNA = "ifany")
+table(TrigPCalc$Trig.Grd.Pt.Unt, useNA= "ifany")
+table(TrigPCalc$PCal.Grd.Pt.Unt, useNA = "ifany")
+
+TrigPCalc$Avg <- 0L
+TrigPCalc$Trig_Pcal.Grd.Unt <- with(TrigPCalc, ifelse(!is.na(T_P.Grd.Pt.Unt), T_P.Grd.Pt.Unt, 
+                                        ifelse(!is.na(Trig.Grd.Pt.Unt)&!is.na(PCal.Grd.Pt.Unt), ((Trig.Grd.Pt.Unt+PCal.Grd.Pt.Unt)/2),
+                                               ifelse(!is.na(Trig.Grd.Pt.Unt), Trig.Grd.Pt.Unt, 
+                                                      ifelse(!is.na(PCal.Grd.Pt.Unt), PCal.Grd.Pt.Unt, "NA")))))
+table(TrigPCalc$Avg, useNA = "ifany")
+                                
+TrigPCalc$Avg2 <- with(TrigPCalc, ifelse(is.na(Trig.Grd.Pt.Unt)&is.na(PCal.Grd.Pt.Unt)&is.na(T_P.Grd.Pt.Unt), "yes","no"))
+                                        
+TrigPCalc$PCal.Grd.Pt.Unt <- NULL
+TrigPCalc$Trig.Grd.Pt.Unt <- NULL
+TrigPCalc$T_P.Grd.Pt.Unt <- NULL
+TrigPCalc$Avg.Trig.Pcalc <- NULL
+TrigPCalc$Avg <- NULL
+TrigPCalc$Trig_r <- NULL
+TrigPCalc$PCalc_r <- NULL
+TrigPCalc$TriPCal_r <- NULL
+TrigPCalc$Avg1 <- NULL
+TrigPCalc$Avg2 <- NULL
+
+ALL_PRECLASSES <- merge(ALL_PRECLASSES, TrigPCalc, by="ID", all.x=TRUE)
+
+write.csv(ALL_PRECLASSES, file = "/Users/luisvalderrama/Desktop/OVERALLMAC2311.csv",row.names=FALSE)
+
+lm.s <- lm(ALL_PRECLASSES$Grd.Pt.Unt ~ ALL_PRECLASSES$Col.Alg.Grd.Pt.Unt) 
+summary(lm.s)
+
+
+
+@
+
+\subsection{\textbf {\large Linear Model 15}}
+
+
+<<lm15, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+
+ lm.t <- lm(ALL_PRECLASSES$Grd.Pt.Unt ~ as.numeric(ALL_PRECLASSES$Trig_Pcal.Grd.Unt))
+
+summary(lm.t)
+
+@
+
+
+\subsection{\textbf {\large Linear Model 16}}
+
+
+<<lm16, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+
+ lm.u <- lm(ALL_PRECLASSES$Grd.Pt.Unt ~ ALL_PRECLASSES$STATS1.Grd.Pt.Unt)
+
+summary(lm.u)
+
+@
+
+\subsection{\textbf {\large Linear Model 17}}
+
+
+<<lm17, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+
+ lm.v <- lm(ALL_PRECLASSES$Grd.Pt.Unt ~ ALL_PRECLASSES$STATS2.Grd.Pt.Unt)
+
+summary(lm.v)
+
+@
+
+\subsection{\textbf {\large Linear Model 18}}
+
+
+<<lm18, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
+
+ lm.w <- lm(ALL_PRECLASSES$Grd.Pt.Unt ~ ALL_PRECLASSES$CALC2.Grd.Pt.Unt)
+
+summary(lm.w)
+
+
+@
 
 \end{document}
