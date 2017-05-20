@@ -86,19 +86,19 @@ boxplot1 <- ggplot(MACDATA, aes(x = as.factor(Term), y = Max.Score_NA, fill=as.f
 \newpage
 
 \fontsize{22}{22}
-\section{\textbf{\underline{\Large Introduction}}}
+\section{\textbf{\underline{\large Introduction}}}
 \begin{center} \textbf{\underline{\large Scale-Up Data for Fall 2015, Spring 2016, Summer 2016, Fall 2016}}
 \par
 \vspace{5mm}
 \par
 \par
 \vspace{2mm}
-\normalsize This lab report was made using student data from the Calculus 1 course MAC2311 at Florida International University. Many things that were tested were the effects of outside factors such as previous class data, SAT scores, and if they have repeated the class.Most information was done from the Fall 2011 semester to the Fall 2016 semester. Currently data from the Summer 2016 semester and the Fall 2016 are being used and will be compared to previous semesters.
+\normalsize This lab report was made using student data from the Calculus 1 course MAC2311 at Florida International University. Many of the things that were tested were the effects of outside factors such as previous class data, SAT scores, and if they have repeated the class. Most information was obtained from the Fall 2011 semester to the Fall 2016 semester. 
 \par
 \vspace{7mm}
 \end{center}
-\section{{\textbf {\underline{\Large Plots}}}}
-\subsection{\textbf {\large Histogram Depicting SAT Scores in MAC2311}}
+\section{{\textbf {\underline{\large Plots}}}}
+\subsection{\textbf {\normalsize Histogram Depicting SAT Scores in MAC2311}}
 
 <<plot1, echo=FALSE, fig.align='center', warning=F,fig.width=7, fig.height=5, fig.keep='high'>>=
 hist(MACDATA$Max.Score_NA, breaks=40, main="SAT Scores in MAC2311 Fall 11 to Fall 16", col = "#7be5ad", col.main = "Navy blue", xlab = "SAT Score", ylab = "# of Students") #### Changes main title, col adds color to bar, col.main adds color to main title. 
@@ -110,7 +110,7 @@ hist(MACDATA$Max.Score_NA, breaks=40, main="SAT Scores in MAC2311 Fall 11 to Fal
 \break
 
 
-\subsection {\textbf{\large Boxplot Depicting SAT Scores in MAC2311 per Semester.}}
+\subsection {\textbf{\normalsize Boxplot Depicting SAT Scores in MAC2311 per Semester.}}
 \fontsize{22}{22}
 <<plot2, echo=FALSE, fig.align='center', warning=F,fig.width=7.5, fig.height=6.5, fig.keep='high'>>=
 print(boxplot1)
@@ -363,7 +363,7 @@ table5$range <- NULL
 #\textbf{\underline{\scriptsize Table 4}}
 #\scriptsize Here we can see the averages, standard deviation, minimum, and maximun ranges for the HHMI affiliated professors in the Fall of 2016. Row 1 corresponds to Professor Wlodarczyk, Row 2 corresponds to Professor Bao, Row 3 corresponds to Professor Edward, Row 4 corresponds to Professor Draghici, and Row 5 corresponds to all other professors not HHMI affiliated.
 @ 
-\subsection{\textbf{\large Boxplots depicting SAT Scores per Scale-Up Professor Compared to Other Instructors}}
+\subsection{\textbf{\normalsize Boxplots depicting SAT Scores per Scale-Up Professor Compared to Other Instructors}}
 <<plot09, echo=FALSE, fig.align='center', warning=F,fig.width=7.3, fig.height=8, fig.keep='high'>>=
 grid.arrange(boxplot5,boxplot6, ncol=1)
 @
@@ -409,7 +409,7 @@ print(table4)
 print(table5)
 @
 
-\subsection {\textbf{\large Boxplot Depicting Effect of Learning Style to Grade Obtained in MAC2311.}}
+\subsection {\textbf{\normalsize Boxplot Depicting Effect of Learning Style to Grade Obtained in MAC2311.}}
 <<plot9, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
  boxplot.5 <- ggplot(MACDATA, aes(x=HHMIActive, y= Grd.Pt.Unt, fill=HHMIActive)) + geom_boxplot() + labs(title= "Distribution of MAC2311 Final Grade", x="",y="Final grade") + scale_x_discrete(labels=c("Scale-up", "Regular"))+ theme(axis.text.x= element_text(colour= "darkblue", angle = 0, size = 12, vjust = 0.6), axis.text.y=element_text(colour = "darkblue", size = 14), title=element_text(colour = "Navy blue", size = 20)) + theme(legend.position = "none") + scale_fill_manual(values = c("#7bc5e5", "#7be5ad"))
 
@@ -437,10 +437,10 @@ table6$range <- NULL
 print(table6)
 @
 
-\subsection {\textbf{\large Spiderplots Depicting Improvement of Three Questions from Diagnostic to Final Exam in the Fall 2015 Semester.}}
+\subsection {\textbf{\normalsize Spiderplots Depicting Improvement of Three Questions from Diagnostic to Final Exam in the Fall 2015 Semester.}}
 
 
-<<<<plot209, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.0, fig.keep='high'>>=
+<<<<plot209, echo=FALSE, fig.align='center', warning=F,fig.width=7.5, fig.height=6, fig.keep='high'>>=
 TL.Final.15 <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/FINAL 2015 FALL/TL-FINAL 15.csv", na.strings = c("","NA"))
 TL.Final.15.Letters <- subset(TL.Final.15, select = c("X5a.Lt", "X5b.Lt", "X5c.Lt"))
 names(TL.Final.15.Letters)[names(TL.Final.15.Letters)=="X5a.Lt"] <- "5a Letter"
@@ -593,16 +593,6 @@ f=rbind(f, f.d)
 f <- as.data.frame(sapply(f, as.numeric))
 rownames(f) <- c("1","2","Final","Diag.")
 
-colors_border=c( rgb(0.2,0.5,0.9,0.9), rgb(0.4,0.7,0.1,0.9) )
-colors_in=c( rgb(0.2,0.5,0.9,0.2), rgb(0.4,0.7,0.1,0.2) )
-sppl2<- radarchart( f  , axistype=1 , 
-            #custom polygon
-            pcol=colors_border , pfcol=colors_in , plwd=4 , plty=1,
-            #custom the grid
-            cglcol="black", cglty=1, axislabcol="black", caxislabels=seq(0,1,25), cglwd=0.8,
-            #custom labels
-            vlcex=0.8 , title = "J.Edward and T.Leness Performance on \n Common Diagnostic Question 5b. Correct Answer is C")
-legend(x=0.7, y=1, legend = rownames(f[-c(1,2),]), bty = "n", pch=20 , col=colors_in , text.col = "grey", cex=1.2, pt.cex=3)
 
 g <- ddply(JE.TL.Final.15.Comb, .(), summarise,
            cA = (sum(`5c Letter` =="A", na.rm=TRUE)/sum(!is.na(`5c Letter`))*100),
@@ -617,6 +607,35 @@ g=rbind(g, g.d)
 g <- as.data.frame(sapply(g, as.numeric))
 rownames(g) <- c("1","2","Final","Diag.")
 
+
+
+@
+\textbf{\underline{\normalsize Spiderplots 1-3}}
+\par
+\normalsize
+These plots are used to see the comparison of three questions used on both the diagnostic exam given at the beginning of the semester and the final exam at the end of the semester. In the diagnostic results you see that there is a tendency for student choices to be any of the five answer choices but once you look at the final results most students narrow it down to two choices, including the correct answer. You can also see that the students who pick the correct answer increases. 
+
+<<<<plot20101, echo=FALSE, fig.align='center', warning=F,fig.width=7.5, fig.height=6, fig.keep='high'>>=
+colors_border=c( rgb(0.2,0.5,0.9,0.9), rgb(0.4,0.7,0.1,0.9) )
+colors_in=c( rgb(0.2,0.5,0.9,0.2), rgb(0.4,0.7,0.1,0.2) )
+sppl2<- radarchart( f  , axistype=1 , 
+            #custom polygon
+            pcol=colors_border , pfcol=colors_in , plwd=4 , plty=1,
+            #custom the grid
+            cglcol="black", cglty=1, axislabcol="black", caxislabels=seq(0,1,25), cglwd=0.8,
+            #custom labels
+            vlcex=0.8 , title = "J.Edward and T.Leness Performance on \n Common Diagnostic Question 5b. Correct Answer is C")
+legend(x=0.7, y=1, legend = rownames(f[-c(1,2),]), bty = "n", pch=20 , col=colors_in , text.col = "grey", cex=1.2, pt.cex=3)
+
+
+
+@
+\par
+\normalsize
+These plots are used to see the comparison of three questions used on both the diagnostic exam given at the beginning of the semester and the final exam at the end of the semester. In the diagnostic results you see that there is a tendency for student choices to be any of the five answer choices but once you look at the final results most students narrow it down to two choices, including the correct answer. You can also see that the students who pick the correct answer increases. 
+
+
+<<<<plot2012123, echo=FALSE, fig.align='center', warning=F,fig.width=7.5, fig.height=6, fig.keep='high'>>=
 colors_border=c( rgb(0.2,0.5,0.9,0.9), rgb(0.4,0.7,0.1,0.9) )
 colors_in=c( rgb(0.2,0.5,0.9,0.2), rgb(0.4,0.7,0.1,0.2) )
 sppl3 <- radarchart( g  , axistype=1 , 
@@ -630,16 +649,14 @@ legend(x=0.7, y=1, legend = rownames(g[-c(1,2),]), bty = "n", pch=15 , col=color
 
 
 @
-\textbf{\underline{\normalsize Spiderplots 1-3}}
 \par
 \normalsize
 These plots are used to see the comparison of three questions used on both the diagnostic exam given at the beginning of the semester and the final exam at the end of the semester. In the diagnostic results you see that there is a tendency for student choices to be any of the five answer choices but once you look at the final results most students narrow it down to two choices, including the correct answer. You can also see that the students who pick the correct answer increases. 
 
-
 \break
-\section {\textbf {\underline{\Large Linear Models}}}
+\section {\textbf {\underline{\large Linear Models}}}
 \par
-\subsection{\textbf{\large Variables}}
+\subsection{\textbf{\normalsize Variables}}
 \par
 \normalsize Here are the list of variables used for the linear models. A short description of what each variable entails is also given.
 
@@ -654,17 +671,17 @@ These plots are used to see the comparison of three questions used on both the d
     \end{itemize}}
     \item SexM
     {\begin{itemize}
-    \item The students whose sex is Male. The rest of the responses are seen as females.
+    \item The students whose sex is Male. The rest of the responses are seen as female students.
     \end{itemize}}
     \item GPA
     {\begin{itemize}
-    \item The GPA the student had ... taking MAC2311.
+    \item The GPA the student had at the end of the semester they took MAC2311. This GPA includes the grade that the student earned that semester in MAC2311. 
     \end{itemize}}
     \item Repeats
     {\begin{itemize}
     \item This corresponds to how many times the student has taken MAC2311.
     \end{itemize}}
-\item Intr.ID
+\item Instr.ID
     {\begin{itemize}
     \item This correspons to the given ID's for the intstructors teaching MAC2311.
     \end{itemize}}
@@ -677,7 +694,7 @@ These plots are used to see the comparison of three questions used on both the d
 \normalsize These variables where mainly used to see their impact on the grade obtained in MAC2311 (Grd.Pt.Unt). Some as shown by the following linear models were seen significantly affecting grades positively or negatively and some were seen as not significantly affecting the grade at all. 
 
 \newpage
-\subsection{\textbf{\large Linear Model 1}}
+\subsection{\textbf{\normalsize Linear Model 1: Correlation between the Grade Obtained with SAT Scores, Sex, and GPA}}
 \fontsize{10}{10}
 <<lm1, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
 lm(MACDATA$Grd.Pt.Unt ~ MACDATA$Max.Score_NA + MACDATA$Sex + MACDATA$GPA)
@@ -686,13 +703,13 @@ lm.r = lm(MACDATA$Grd.Pt.Unt ~ MACDATA$Max.Score_NA + MACDATA$Sex + MACDATA$GPA)
 summary(lm.r)
 
 @
-\textbf{\underline{\normalsize Linear Model 1.}}
+\textbf{\underline{\normalsize Linear Model 1}}
 \par
-\normalsize This linear model was done to see how significant the grade you get in Calculus depends on three factors: SATscore, Sex, and GPA. Here we see that all three factors are statistically significant in showing how likely they are to influence the grade obtained in Calculus 1 with data from Fall 2011 to Fall 2016.
+\normalsize This linear model was done to see how significant the grade you get in Calculus depends on three factors: SATscore, Sex, and GPA. Here we see that all three factors are statistically significant in showing how likely they are to influence the grade obtained in Calculus 1 with data from Fall 2011 to Fall 2016. The R-squared for this was 0.3072 meaning that it is a good indicator of significance.
 
 \break
 
-\subsection{\textbf{\large Linear Model 2}}
+\subsection{\textbf{\normalsize Linear Model 2: Correlation between the Grade Obtained with SAT Scores and Repeats}}
 
 \fontsize{8}{8}
 <<lm2, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
@@ -702,24 +719,22 @@ Upd1_1118_1161_1165 <- subset(MACDATA, Term == "1158"|Term=="1161"|Term=="1165"|
 lm.a = lm(Upd1_1118_1161_1165$Grd.Pt.Unt ~  
             Upd1_1118_1161_1165$Max.Score_NA + Upd1_1118_1161_1165$Repeats)
 summary(lm.a)
-print(lm.a)
 
 @
 \textbf {\underline{\normalsize Linear Model 2.}}
 \par
-\normalsize For this linear model we are only looking at the semesters from Fall 2015 to Fall 2016. This linear model was done to see the significance of the grade you obtain in the class to just SAT scores and how many times the students repeated. When comparing it to only these two factors both factors are significant. There is a positive correlation with the max SAT score and also a negative correlation with repeated, but the r squared value is still less than .2.
+\normalsize For this linear model we are only looking at the semesters from Fall 2015 to Fall 2016. This linear model was done to see the significance of the grade you obtain in the class to just SAT scores and how many times the students repeated. When comparing it to only these two factors both factors are significant. There is a positive correlation with the max SAT score and also a negative correlation with repeated, but the r squared value is still less than .2 (0.06225).
 
 
 \break 
 
-\subsection{\textbf{\large Linear Model 3}}
+\subsection{\textbf{\normalsize Linear Model 3: Correlation between the Grade Obtained with SAT Scores, Sex, GPA, Repeats, and Instructors}}
 
 \fontsize{10}{10}
 <<lm3, echo=TRUE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
 
 lm.b = lm( Grd.Pt.Unt ~ Max.Score_NA + Sex + GPA + Repeats + as.factor(Instr.ID) +
              as.factor(Instr.ID):Max.Score_NA, data=MACDATA)
-
 @
 \textbf {\underline{\normalsize Linear Model 3.}}
 
@@ -733,12 +748,11 @@ lm.b = lm( Grd.Pt.Unt ~ Max.Score_NA + Sex + GPA + Repeats + as.factor(Instr.ID)
   \item Instructor effect.........................Insignificant
   \item Instructor and SAT scores.........Insignificant
  \end{itemize}}
-Here we see that SAT scores, Sex, GPA, and Repeats do play a role but when comparing if there were any differences in instructors or instructors and the SAT scores then there was no significance. This is also not a good linear model because the R squared value was
-greater than 0.2
+Here we see that SAT scores, Sex, GPA, and Repeats do play a role but when comparing if there were any differences in instructors or instructors and the SAT scores then there was no significance. This is a good linear model because the R squared value was greater than 0.2 (0.3655).
 
 \break
 
-\subsection{\textbf{\large Linear Model 4}}
+\subsection{\textbf{\normalsize Linear Model 4: Correlation between the Grade Obtained with Repeats}}
 
 
 \fontsize{10}{10}
@@ -751,9 +765,9 @@ MAC2311_ALEKS_RPT_1118_1161 <- read.csv("/Users/luisvalderrama/Desktop/HHMI Rese
 @
 \textbf {\underline{\normalsize Linear Model 4.}}
 
-\normalsize This linear model used repeats as the only variable and although a significant negative correlation was found comparing it to the grade obtained the r squared a lot lower than .2 signifying that it is not a good model.
+\normalsize This linear model used repeats as the only variable and although a significant negative correlation was found comparing it to the grade obtained the r squared a lot lower than .2 (0.003366) signifying that it is not a good model.
 
-\subsection{\textbf{\large Linear Model 5}}
+\subsection{\textbf{\normalsize Linear Model 5: Correlation between the Grade Obtained with ALEKS Scores}}
 
 \fontsize{10}{10}
 <<lm5, echo=TRUE, warning=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
@@ -765,7 +779,7 @@ lm.d = lm(MAC2311_ALEKS_RPT_1118_1161$Grd.Pt.Unt ~ MAC2311_ALEKS_RPT_1118_1161$A
 \normalsize This linear model tested the relationship between the grade obtained in Calculus 1 with ALEKS scores and repeats. Nothing singificant was found becuase most of the students had missing ALEKS scores as not all of them had taken the ALEKS exam. 
 \newpage
 
-\subsection{\textbf {\large Linear Model 6}}
+\subsection{\textbf {\normalsize Linear Model 6: Correlation between the Grade Obtained with Grade from Diagnostic on Spring 2016}}
 
 \fontsize{10}{10}
 <<lm6, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
@@ -791,9 +805,9 @@ summary(lm.e)
 @
 \textbf {\underline{\normalsize Linear Model 6}}
 
-\normalsize This linear model compares the significance of the grade obtained in Calculus 1 in the Spring 2016 semester with the corresponding Diagnostic exam. It wass seen that the grade obatined on the Diagnostic exam did correlate to the grade received although the R squared value is still less than 0.2.
+\normalsize This linear model compares the significance of the grade obtained in Calculus 1 in the Spring 2016 semester with the corresponding Diagnostic exam. It wass seen that the grade obatined on the Diagnostic exam did correlate to the grade received although the R squared value is still less than 0.2 (0.08715).
 
-\subsection{\textbf {\large Linear Model 7}}
+\subsection{\textbf {\normalsize Linear Model 7: Correlation between the Grade Obtained and Diagnostic Topics in Spring 2016}}
 
 
 <<lm7, echo=TRUE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
@@ -810,11 +824,11 @@ lm.f = lm(DIAG_1116_MAC2311$Grd.Pt.Unt ~
 
 \textbf {\underline{\normalsize Linear Model 7}}
 
-\normalsize This linear model is comparing to check if any of the specific elements tested in the diagnostic exam had any correlation to the diagnostic exam. This was done with data of the semester Spring 2016 and the only element that was seen to be correlated to gradepoint average were questions dealing with Functions and Graphs. This linear model had an R-Squared value of less than .2 meaning it's not a good descriptor of correlation. 
+\normalsize This linear model is comparing to check if any of the specific elements tested in the diagnostic exam had any correlation to the diagnostic exam. This was done with data of the semester Spring 2016 and the only element that was seen to be correlated to grade point average were questions dealing with Functions and Graphs. This linear model had an R-Squared value of less than .2 (0.1264) meaning it's not a good descriptor of correlation. 
 
 
 \newpage
-\subsection{\textbf {\large Linear Model 8}}
+\subsection{\textbf {\normalsize Linear Model 8: Correlation between the Grade Obtained with Grade from Diagnostic on Fall 2015 }}
 
 
 <<lm8, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
@@ -829,7 +843,6 @@ DIAG_1158_MAC2311 <- DIAG_1158_MAC2311[-which(is.na(DIAG_1158_MAC2311$Last)),]
 DIAG_1158_MAC2311$Total <- (DIAG_1158_MAC2311$Total*100)
 
 lm.g = lm(DIAG_1158_MAC2311$Grd.Pt.Unt ~ DIAG_1158_MAC2311$Total)
-summary(lm.g)
 summary(lm.g)
 
 DIAG_1158_MAC2311$CD...Corr.1 <- (DIAG_1158_MAC2311$CD...Corr.1*100)
@@ -846,11 +859,11 @@ DIAG_1158_MAC2311$Trig...Corr.1 <- (DIAG_1158_MAC2311$Trig...Corr.1*100)
 @
 \textbf {\underline{\normalsize Linear Model 8}}
 
-\normalsize This linear model compares the significance of the grade obtained in Calculus 1 in the Fall 2015 semester with the corresponding Diagnostic exam. It wass seen that the grade obatined on the Diagnostic exam did correlate to the grade received although the R squared value is still less than 0.2.
+\normalsize This linear model compares the significance of the grade obtained in Calculus 1 in the Fall 2015 semester with the corresponding Diagnostic exam. It wass seen that the grade obatined on the Diagnostic exam did correlate to the grade received although the R squared value is still less than 0.2 (0.1433).
 
 \newpage
 
-\subsection{\textbf {\large Linear Model 9}}
+\subsection{\textbf {\normalsize Linear Model 9: Correlation between the Grade Obtained and Diagnostic Topics in Spring 2016}}
 
 
 <<lm9, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
@@ -868,11 +881,11 @@ summary(lm.h)
 @
 \textbf {\underline{\normalsize Linear Model 9}}
 
-\normalsize This linear model is comparing to check if any of the specific elements tested in the diagnostic exam had any correlation to the diagnostic exam. This was done with data of the semester Fall 2015 and none of the elements were seen have a significant correlation with the grade obtained. 
+\normalsize This linear model is comparing to check if any of the specific elements tested in the diagnostic exam had any correlation to the diagnostic exam. This was done with data of the semester Fall 2015 and none of the elements were seen have a significant correlation with the grade obtained. The R-Squared value was less than 0.2 (0.1275) meaning this is not the full explanation for there to be a correlation.  
 
 \newpage
 
-\subsection{\textbf {\large Linear Models 10-12}}
+\subsection{\textbf {\normalsize Linear Models 10-12: Correlation between the Grade Obtained and Type of Learning}}
 
 
 <<lm10, echo=TRUE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
@@ -899,7 +912,9 @@ lm.n <- lm(SCALEUP.1158.1168$Grd.Pt.Unt ~ SCALEUP.1158.1168$Max.Score_NA
 
 \normalsize These linear models were tested to see whether there was a realtionship between the grade obrained in Calculus and the type of learning used. Other factors were inputed to see if the effect changed. In all trials, the relationship between grade obtained and the type of learning was not significant. This was done only looking from the Fall 2015 semester up until the Fall 2016 semester. 
 
-\subsection{\textbf {\large Linear Model 13}}
+\newpage
+
+\subsection{\textbf {\normalsize Linear Model 13: Correlation between the Grade Obtained and Type of Learning for Scale-Up Professors}}
 
 
 <<lm13, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
@@ -914,9 +929,9 @@ summary(lm.p)
 @
 \textbf {\underline{\normalsize Linear Model 13}}
 
-\normalsize
+\normalsize In this linear model we compared the gradepoint unit with SAT scores and the type of learning for only three professors: Tedi Draghici, Thomas Leness, and Julian Edward. There was a positive correlation between both SAT and type of learning for all these professors, but the R-Squared (0.08617) was not significant. 
 
-\subsection{\textbf {\large Linear Model 14}}
+\subsection{\textbf {\normalsize Linear Model 14: Correlation between the Grade Obtained and Grade from College Algebra}}
 
 
 <<lm14, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
@@ -990,22 +1005,6 @@ MAC1140_RPT <- MAC1140_RPT[!duplicated(MAC1140_RPT$ID, fromLast = TRUE) , ]
 
 MAC1140$Repeats <- MAC1140_RPT$Repeats
 
-## STATS 1 ##
-STATS1 <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/Pre Reqs/STA3111_1118-1161_FIU_JD_CRSE_GRADE_DATA_2_476707713-9.csv")
-STATS1_RPT <- STATS1[c("ID","Term")]
-STATS1_RPT$Repeats <- 0L
-i <- which(duplicated(STATS1_RPT$ID))
-STATS1_RPT$Repeats[i] <- with(STATS1_RPT[i, ], unsplit(lapply(split(ID, ID), seq_along), ID))
-
-STATS1_RPT$STATS1.Grd.Pt.Unt <- STATS1$Grd.Pt.Unt
-names(STATS1_RPT)[names(STATS1_RPT)=="Trig.PCal.Rpt"] <- "STATS1.Rpt"
-names(STATS1_RPT)[names(STATS1_RPT)=="Trig.PCal.Term"] <- "STATS1.Term"
-
-STATS1_RPT <- STATS1_RPT[order(STATS1_RPT$STATS1.Rpt),]  ##Keeps most recent repeats wihtout having duplicates##
-STATS1_RPT <- STATS1_RPT[!duplicated(STATS1_RPT$ID, fromLast = TRUE) , ]
-
-STATS1$Repeats <- STATS1_RPT$Repeats
-
 ## STATS 2 ##
 STATS2 <- read.csv("/Users/luisvalderrama/Desktop/HHMI Research/Pre Reqs/STA3112_1118-1161_FIU_JD_CRSE_GRADE_DATA_2_476707713-9-2.csv")
 STATS2_RPT <- STATS2[c("ID","Term")]
@@ -1037,13 +1036,13 @@ CALC2_RPT <- CALC2_RPT[order(CALC2_RPT$CALC2.Rpt) , ]  ##Keeps most recent repea
 CALC2_RPT <- CALC2_RPT[!duplicated(CALC2_RPT$ID, fromLast = TRUE) , ]
 
 
-CALC2$Repeats <- CALC2_RPT[c("Repeats")]
+CALC2$Repeats <- CALC2_RPT$Repeats
 
 ## Merging Pre reqs into MAC2311_Aleks_rpt
 ALL_CLASSES <- merge(MAC1105_RPT, MAC1114_RPT, all=TRUE)
 ALL_CLASSES <- merge(ALL_CLASSES, MAC1140_RPT, all=TRUE)
 ALL_CLASSES <- merge(ALL_CLASSES, MAC1147_RPT, all=TRUE)
-ALL_CLASSES <- merge(ALL_CLASSES, STATS1_RPT, all=TRUE)
+## ALL_CLASSES <- merge(ALL_CLASSES, STATS1_RPT, all=TRUE)
 ALL_CLASSES <- merge(ALL_CLASSES, STATS2_RPT, all=TRUE)
 ALL_CLASSES <- merge(ALL_CLASSES, CALC2_RPT, all=TRUE)
 
@@ -1059,26 +1058,16 @@ TrigPCalc$Trig.Term <- NULL
 TrigPCalc$Trig.Rpt <- NULL
 TrigPCalc$Trig.PCal.Term <- NULL
 TrigPCalc$Trig.PCal.Rpt <- NULL
-# One way to do it##
-TrigPCalc[-1] <- lapply(TrigPCalc[-1], function(x) as.numeric(as.character(x)))
-TrigPCalc$Avg.Trig.PCal <-  rowMeans(TrigPCalc[-1], na.rm=TRUE)
-TrigPCalc$Avg
 
-ALL_PRECLASSES <- join(ALL_PRECLASSES, TrigPCalc, type="left")
-ALL_PRECLASSES$Avg.Trig.PCal <- NULL
 ## Second way to do it
 TrigPCalc$Avg.Trig.Pcalc <- with(TrigPCalc, ifelse(is.na(Trig.Grd.Pt.Unt) | is.na(PCal.Grd.Pt.Unt), T_P.Grd.Pt.Unt, (Trig.Grd.Pt.Unt + PCal.Grd.Pt.Unt) / 2))
-table(TrigPCalc$T_P.Grd.Pt.Unt, useNA = "ifany")
-table(TrigPCalc$Trig.Grd.Pt.Unt, useNA= "ifany")
-table(TrigPCalc$PCal.Grd.Pt.Unt, useNA = "ifany")
 
 TrigPCalc$Avg <- 0L
 TrigPCalc$Trig_Pcal.Grd.Unt <- with(TrigPCalc, ifelse(!is.na(T_P.Grd.Pt.Unt), T_P.Grd.Pt.Unt, 
                                         ifelse(!is.na(Trig.Grd.Pt.Unt)&!is.na(PCal.Grd.Pt.Unt), ((Trig.Grd.Pt.Unt+PCal.Grd.Pt.Unt)/2),
                                                ifelse(!is.na(Trig.Grd.Pt.Unt), Trig.Grd.Pt.Unt, 
                                                       ifelse(!is.na(PCal.Grd.Pt.Unt), PCal.Grd.Pt.Unt, "NA")))))
-table(TrigPCalc$Avg, useNA = "ifany")
-                                
+
 TrigPCalc$Avg2 <- with(TrigPCalc, ifelse(is.na(Trig.Grd.Pt.Unt)&is.na(PCal.Grd.Pt.Unt)&is.na(T_P.Grd.Pt.Unt), "yes","no"))
                                         
 TrigPCalc$PCal.Grd.Pt.Unt <- NULL
@@ -1101,9 +1090,17 @@ summary(lm.s)
 
 
 
-@
 
-\subsection{\textbf {\large Linear Model 15}}
+
+@
+\textbf {\underline{\normalsize Linear Model 14}}
+
+\normalsize This linear model was done to study the relationship between the grade obtained in Calulus 1 and the grade obtained in College Algebra. When you look at the relationship the grade obtained in college algebra is significant in determining the grade obtained in Calculus 1, but the R-Squared value is still below 0.2 (0.06211) which means that it doesn't account for much of the correlation. 
+
+
+
+\subsection{\textbf {\normalsize Linear Model 15: Correlation between the Grade Obtained and Grade from Trigonometry and Pre-Calculus}}
+
 
 
 <<lm15, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
@@ -1113,20 +1110,13 @@ summary(lm.s)
 summary(lm.t)
 
 @
+\textbf {\underline{\normalsize Linear Model 15}}
 
+\normalsize This linear model was done to study the relationship between the grade obtained in Calulus 1 and the combined grade obtained in Trigonometry and Pre-Calculus. When you look at the relationship the grade obtained in Trigonometery and Pre-Calculus is significant in determining the grade obtained in Calculus 1, but the R-Squared value is still below 0.2 (0.1383) which means that it doesn't account for much of the correlation. 
 
-\subsection{\textbf {\large Linear Model 16}}
+\newpage
 
-
-<<lm16, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
-
- lm.u <- lm(ALL_PRECLASSES$Grd.Pt.Unt ~ ALL_PRECLASSES$STATS1.Grd.Pt.Unt)
-
-summary(lm.u)
-
-@
-
-\subsection{\textbf {\large Linear Model 17}}
+\subsection{\textbf {\normalsize Linear Model 16: Correlation between the Grade Obtained and Grade from Statistics II}}
 
 
 <<lm17, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
@@ -1136,17 +1126,25 @@ summary(lm.u)
 summary(lm.v)
 
 @
+\textbf {\underline{\normalsize Linear Model 16}}
 
-\subsection{\textbf {\large Linear Model 18}}
+\normalsize This linear model was done to study the relationship between the grade obtained in Calulus 1 and the grade obtained in Statistics II. When you look at the relationship the grade obtained in Statistics II is significant in determining the grade obtained in Calculus 1, but the R-Squared value is still below 0.2 (0.1202) which means that it doesn't account for much of the correlation. 
+
+\newpage
+
+\subsection{\textbf {\normalsize Linear Model 17: Correlation between the Grade Obtained in Calculus II and Grade from Calculus I}}
 
 
 <<lm18, echo=FALSE, fig.align='center', warning=F,fig.width=6.5, fig.height=4.3, fig.keep='high'>>=
 
- lm.w <- lm(ALL_PRECLASSES$Grd.Pt.Unt ~ ALL_PRECLASSES$CALC2.Grd.Pt.Unt)
+ lm.w <- lm(ALL_PRECLASSES$CALC2.Grd.Pt.Unt ~ ALL_PRECLASSES$Grd.Pt.Unt)
 
 summary(lm.w)
 
 
 @
+\textbf {\underline{\normalsize Linear Model 17}}
+
+\normalsize This linear model was done to study the relationship between the grade obtained in Calulus II and the grade obtained in Calculus 1. When you look at the relationship the grade obtained in Calculus 1 is significant in determining the grade obtained in Calculus II, but the R-Squared value is still below 0.2 (0.1554) which means that it doesn't account for much of the correlation. 
 
 \end{document}
